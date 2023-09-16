@@ -1,8 +1,8 @@
-using Blog.PublicAPI.Data.Configurations;
-using Blog.PublicAPI.Domain.PostAggregate;
+using Blog.ApplicationCore.Data.Configurations;
+using Blog.ApplicationCore.Domain.PostAggregate;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.PublicAPI.Data;
+namespace Blog.ApplicationCore.Data;
 
 public class BlogContext : DbContext
 {
@@ -33,8 +33,9 @@ public class BlogContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new PostConfiguration());
-        modelBuilder.ApplyConfiguration(new TagConfiguration());
+        modelBuilder
+            .ApplyConfiguration(new PostConfiguration())
+            .ApplyConfiguration(new TagConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

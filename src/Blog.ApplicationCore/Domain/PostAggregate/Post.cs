@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Blog.PublicAPI.Domain.PostAggregate;
+namespace Blog.ApplicationCore.Domain.PostAggregate;
 
 public sealed class Post : IAggregateRoot
 {

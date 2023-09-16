@@ -1,6 +1,6 @@
 using System;
 
-namespace Blog.PublicAPI.Domain.PostAggregate;
+namespace Blog.ApplicationCore.Domain.PostAggregate;
 
 public sealed class Tag
 {

@@ -1,14 +1,15 @@
-using Blog.PublicAPI.Domain.PostAggregate;
+using Blog.ApplicationCore.Domain.PostAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Blog.PublicAPI.Data.Configurations;
+namespace Blog.ApplicationCore.Data.Configurations;
 
 public class PostConfiguration : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> builder)
     {
-        builder.HasKey(post => post.Id);
+        builder
+            .HasKey(post => post.Id);
 
         builder
             .Property(post => post.Id)

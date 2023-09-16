@@ -1,14 +1,15 @@
-using Blog.PublicAPI.Domain.PostAggregate;
+using Blog.ApplicationCore.Domain.PostAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Blog.PublicAPI.Data.Configurations;
+namespace Blog.ApplicationCore.Data.Configurations;
 
 public class TagConfiguration : IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.HasKey(tag => tag.Id);
+        builder
+            .HasKey(tag => tag.Id);
 
         builder
             .Property(tag => tag.Id)

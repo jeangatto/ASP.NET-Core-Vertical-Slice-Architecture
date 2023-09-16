@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{38DF20AC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Tests", "tests\Blog.Tests\Blog.Tests.csproj", "{08D32019-BAAC-4AE5-9D72-2F51E93C7831}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.ApplicationCore", "src\Blog.ApplicationCore\Blog.ApplicationCore.csproj", "{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,9 +43,14 @@ Global
 		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A} = {238FC974-4144-4AD3-ADEA-D77272746C4E}
 		{08D32019-BAAC-4AE5-9D72-2F51E93C7831} = {38DF20AC-222C-436E-A547-9F58522E241E}
+		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5} = {238FC974-4144-4AD3-ADEA-D77272746C4E}
 	EndGlobalSection
 EndGlobal

@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Blog.PublicAPI\Blog.PublicAPI.csproj" />
+    <ProjectReference Include="..\..\src\Blog.ApplicationCore\Blog.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>
