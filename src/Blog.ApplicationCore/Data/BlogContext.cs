@@ -12,15 +12,6 @@ public class BlogContext : DbContext
 
     public DbSet<Post> Posts => Set<Post>();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder
-            .UseInMemoryDatabase(nameof(BlogContext))
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
-
-        base.OnConfiguring(optionsBuilder);
-    }
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder
