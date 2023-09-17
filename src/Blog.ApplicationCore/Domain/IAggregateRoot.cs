@@ -1,3 +1,5 @@
 namespace Blog.ApplicationCore.Domain;
 
-public interface IAggregateRoot { }
+public interface IAggregateRoot
+{
+}

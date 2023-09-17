@@ -1,6 +1,6 @@
 using System;
 
-namespace Blog.ApplicationCore.Domain.PostAggregate;
+namespace Blog.PublicAPI.Domain.PostAggregate;
 
 public class Tag
 {

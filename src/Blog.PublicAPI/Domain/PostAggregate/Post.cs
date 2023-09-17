@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Blog.ApplicationCore.Domain.PostAggregate;
+namespace Blog.PublicAPI.Domain.PostAggregate;
 
 public class Post : IAggregateRoot
 {

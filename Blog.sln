@@ -5,52 +5,44 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{238FC974-4144-4AD3-ADEA-D77272746C4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.PublicAPI", "src\Blog.PublicAPI\Blog.PublicAPI.csproj", "{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.PublicAPI", "src\Blog.PublicAPI\Blog.PublicAPI.csproj", "{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C8BFEDBE-706E-46AB-B97E-ADA890429E6A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		global.json = global.json
 		LICENSE = LICENSE
 		nuget.config = nuget.config
-		Directory.Build.props = Directory.Build.props
-		Directory.Packages.props = Directory.Packages.props
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{38DF20AC-222C-436E-A547-9F58522E241E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Tests", "tests\Blog.Tests\Blog.Tests.csproj", "{08D32019-BAAC-4AE5-9D72-2F51E93C7831}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.ApplicationCore", "src\Blog.ApplicationCore\Blog.ApplicationCore.csproj", "{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EA311B9C-C068-4A3C-BA3F-C82003B93F7C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08D32019-BAAC-4AE5-9D72-2F51E93C7831}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{29FC44F1-4387-4D20-AE08-4CE2B1EE351A} = {238FC974-4144-4AD3-ADEA-D77272746C4E}
-		{08D32019-BAAC-4AE5-9D72-2F51E93C7831} = {38DF20AC-222C-436E-A547-9F58522E241E}
-		{5F89C1F7-6ABD-45B7-8FD5-9B4F926568F5} = {238FC974-4144-4AD3-ADEA-D77272746C4E}
+		{EA311B9C-C068-4A3C-BA3F-C82003B93F7C} = {C8BFEDBE-706E-46AB-B97E-ADA890429E6A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7D12FCD-C0A6-4794-8927-C8201DD79C26}
 	EndGlobalSection
 EndGlobal
