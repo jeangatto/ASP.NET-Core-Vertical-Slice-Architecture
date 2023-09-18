@@ -23,7 +23,7 @@ public class TagConfiguration : IEntityTypeConfiguration<Tag>
         builder
             .Property(tag => tag.Title)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(30);
 
         builder
             .HasIndex(tag => new { tag.PostId, tag.Title })
