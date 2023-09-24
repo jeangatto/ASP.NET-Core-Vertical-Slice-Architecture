@@ -2,7 +2,7 @@ using System;
 
 namespace Blog.PublicAPI.Domain.PostAggregate;
 
-public class Tag
+public class Tag : IEntity<Guid>
 {
     public Tag(Guid postId, string title)
     {
@@ -15,7 +15,7 @@ public class Tag
     {
     }
 
-    public Guid Id { get; private init; }
+    public Guid Id { get; }
     public Guid PostId { get; private init; }
     public string Title { get; private init; }
 }

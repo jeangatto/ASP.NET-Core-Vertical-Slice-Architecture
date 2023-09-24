@@ -41,4 +41,4 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --no-restore --verbosity minimal --logger "console;verbosity=detailed"
+        run: dotnet test --no-build --no-restore --verbosity minimal
