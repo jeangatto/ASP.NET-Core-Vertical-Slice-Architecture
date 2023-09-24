@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Blog.PublicAPI.Domain.PostAggregate;
 
@@ -8,12 +9,8 @@ public class Post : IEntity<Guid>, IAggregateRoot
 {
     private readonly List<Tag> _tags = new();
 
-    public Post(string title, string content, string[] tags)
+    private Post(string title, string content, string[] tags)
     {
-        ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
-        ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
-        ArgumentNullException.ThrowIfNull(tags, nameof(tags));
-
         Id = Guid.NewGuid();
         Title = title;
         Content = content;
@@ -34,23 +31,38 @@ public class Post : IEntity<Guid>, IAggregateRoot
 
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
 
-    public void Update(string title, string content, string[] tags)
+    public static async Task<Post> CreateAsync(string title, string content, string[] tags, IPostUniquenessChecker checker)
     {
         ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
         ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
         ArgumentNullException.ThrowIfNull(tags, nameof(tags));
 
+        await checker.ValidateTitleIsUniqueAsync(title);
+
+        var post = new Post(title, content, tags);
+
+        return post;
+    }
+
+    public async Task UpdateAsync(string title, string content, string[] tags, IPostUniquenessChecker checker)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
+        ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
+        ArgumentNullException.ThrowIfNull(tags, nameof(tags));
+
+        await checker.ValidateTitleIsUniqueAsync(title, this);
+
         Title = title;
         Content = content;
         UpdatedAt = DateTime.UtcNow;
-
-        _tags.Clear();
 
         AddTags(tags);
     }
 
     private void AddTags(string[] tags)
     {
+        _tags.Clear();
+
         var newTags = tags
             .Distinct()
             .OrderBy(tag => tag)
