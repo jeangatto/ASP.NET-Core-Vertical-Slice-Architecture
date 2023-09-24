@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Blog.PublicAPI.Domain.PostAggregate;
 
 public class Post : IEntity<Guid>, IAggregateRoot
 {
     private readonly List<Tag> _tags = new();
+
+    public Post()
+    {
+    }
 
     private Post(string title, string content, string[] tags)
     {
@@ -19,10 +22,6 @@ public class Post : IEntity<Guid>, IAggregateRoot
         AddTags(tags);
     }
 
-    public Post()
-    {
-    }
-
     public Guid Id { get; }
     public string Title { get; private set; }
     public string Content { get; private set; }
@@ -31,26 +30,20 @@ public class Post : IEntity<Guid>, IAggregateRoot
 
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
 
-    public static async Task<Post> CreateAsync(string title, string content, string[] tags, IPostUniquenessChecker checker)
+    public static Post Create(string title, string content, string[] tags)
     {
         ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
         ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
         ArgumentNullException.ThrowIfNull(tags, nameof(tags));
 
-        await checker.ValidateTitleIsUniqueAsync(title);
-
-        var post = new Post(title, content, tags);
-
-        return post;
+        return new Post(title, content, tags);
     }
 
-    public async Task UpdateAsync(string title, string content, string[] tags, IPostUniquenessChecker checker)
+    public void Update(string title, string content, string[] tags)
     {
         ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
         ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
         ArgumentNullException.ThrowIfNull(tags, nameof(tags));
-
-        await checker.ValidateTitleIsUniqueAsync(title, this);
 
         Title = title;
         Content = content;

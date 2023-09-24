@@ -18,4 +18,6 @@ public class Tag : IEntity<Guid>
     public Guid Id { get; }
     public Guid PostId { get; private init; }
     public string Title { get; private init; }
+
+    public override string ToString() => $"Title = {Title}";
 }
