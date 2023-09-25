@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand, Result>
+public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Result>
 {
-    private readonly IValidator<UpdatePostCommand> _validator;
+    private readonly IValidator<UpdatePostRequest> _validator;
     private readonly BlogContext _dbContext;
 
-    public UpdatePostCommandHandler(IValidator<UpdatePostCommand> validator, BlogContext dbContext)
+    public UpdatePostRequestHandler(IValidator<UpdatePostRequest> validator, BlogContext dbContext)
     {
         _validator = validator;
         _dbContext = dbContext;
     }
 
-    public async Task<Result> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdatePostRequest request, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)

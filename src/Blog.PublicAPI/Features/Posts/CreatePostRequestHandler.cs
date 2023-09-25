@@ -10,18 +10,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Result>
+public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result>
 {
-    private readonly IValidator<CreatePostCommand> _validator;
+    private readonly IValidator<CreatePostRequest> _validator;
     private readonly BlogContext _dbContext;
 
-    public CreatePostCommandHandler(IValidator<CreatePostCommand> validator, BlogContext dbContext)
+    public CreatePostRequestHandler(IValidator<CreatePostRequest> validator, BlogContext dbContext)
     {
         _validator = validator;
         _dbContext = dbContext;
     }
 
-    public async Task<Result> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
