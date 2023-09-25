@@ -29,7 +29,8 @@ public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _dbContext.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title, cancellationToken))
+        if (await _dbContext.Posts.AsNoTracking()
+            .AnyAsync(post => post.Title == request.Title, cancellationToken))
         {
             return Result.Error("There is already a registered post with the given title");
         }

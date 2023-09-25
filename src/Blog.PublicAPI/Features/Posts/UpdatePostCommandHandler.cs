@@ -28,12 +28,16 @@ public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _dbContext.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
+        if (await _dbContext.Posts.AsNoTracking()
+            .AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
         {
             return Result.Error("There is already a registered post with the given title");
         }
 
-        var post = await _dbContext.Posts.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+        var post = await _dbContext.Posts
+            .Include(post => post.Tags)
+            .FirstOrDefaultAsync(post => post.Id == request.Id, cancellationToken: cancellationToken);
+
         if (post == null)
         {
             return Result.NotFound($"No posts found by id = {request.Id}");
