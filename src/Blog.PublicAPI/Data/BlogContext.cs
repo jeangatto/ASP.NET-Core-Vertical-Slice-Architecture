@@ -1,5 +1,6 @@
-using Blog.PublicAPI.Data.Configurations;
+using System.Reflection;
 using Blog.PublicAPI.Domain.PostAggregate;
+using Blog.PublicAPI.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -13,6 +14,8 @@ public class BlogContext : DbContext
     }
 
     public DbSet<Post> Posts => Set<Post>();
+    public DbSet<User> Users => Set<User>();
+
 
     public override ChangeTracker ChangeTracker
     {
@@ -36,8 +39,7 @@ public class BlogContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .ApplyConfiguration(new PostConfiguration())
-            .ApplyConfiguration(new TagConfiguration());
+            .ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(modelBuilder);
     }

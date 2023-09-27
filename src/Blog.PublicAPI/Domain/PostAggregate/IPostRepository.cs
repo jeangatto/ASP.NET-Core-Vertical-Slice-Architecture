@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Blog.PublicAPI.Domain.PostAggregate;
 
-public interface IPostRepository
+public interface IPostRepository : IDisposable
 {
     Task AddAsync(Post post);
     Task UpdateAsync(Post post);

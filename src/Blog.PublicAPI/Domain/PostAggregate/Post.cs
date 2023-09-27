@@ -23,11 +23,13 @@ public class Post : IEntity<Guid>, IAggregateRoot
     }
 
     public Guid Id { get; }
+    public Guid AuthorId { get; private set; }
     public string Title { get; private set; }
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
+    public Author Author { get; private set; }
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
 
     public static Post Create(string title, string content, string[] tags)

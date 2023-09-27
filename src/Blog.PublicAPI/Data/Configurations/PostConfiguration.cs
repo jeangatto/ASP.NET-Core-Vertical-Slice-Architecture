@@ -17,6 +17,10 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .ValueGeneratedNever();
 
         builder
+            .Property(post => post.AuthorId)
+            .IsRequired();
+
+        builder
             .Property(post => post.Title)
             .IsRequired()
             .HasMaxLength(100);
@@ -32,6 +36,12 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder
             .Property(post => post.UpdatedAt)
             .IsRequired(false);
+
+        builder
+            .HasOne(post => post.Author)
+            .WithMany()
+            .HasForeignKey(post => post.AuthorId)
+            .IsRequired();
 
         builder
             .HasMany(post => post.Tags)

@@ -8,25 +8,25 @@ namespace Blog.PublicAPI.Features.Posts;
 
 public class PostRepository : IPostRepository
 {
-    private readonly BlogContext _context;
+    private readonly BlogContext _dbContext;
 
-    public PostRepository(BlogContext context) => _context = context;
+    public PostRepository(BlogContext dbContext) => _dbContext = dbContext;
 
     public async Task AddAsync(Post post)
     {
-        _context.Add(post);
-        await _context.SaveChangesAsync();
+        _dbContext.Add(post);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Post post)
     {
-        _context.Update(post);
-        await _context.SaveChangesAsync();
+        _dbContext.Update(post);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Post> GetByIdAsync(Guid id)
     {
-        return await _context.Posts
+        return await _dbContext.Posts
             .AsNoTrackingWithIdentityResolution()
             .Include(post => post.Tags)
             .FirstOrDefaultAsync(post => post.Id == id);
@@ -34,15 +34,49 @@ public class PostRepository : IPostRepository
 
     public async Task<bool> ExistsAsync(string title)
     {
-        return await _context.Posts
+        return await _dbContext.Posts
             .AsNoTracking()
             .AnyAsync(post => post.Title == title);
     }
 
     public async Task<bool> ExistsAsync(string title, Guid existingId)
     {
-        return await _context.Posts
+        return await _dbContext.Posts
             .AsNoTracking()
             .AnyAsync(post => post.Title == title && post.Id != existingId);
     }
+
+    #region IDisposable
+
+    // To detect redundant calls.
+    private bool _disposed;
+
+    // Public implementation of Dispose pattern callable by consumers.
+    ~PostRepository() => Dispose(false);
+
+    // Public implementation of Dispose pattern callable by consumers.
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Protected implementation of Dispose pattern.
+    private void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        // Dispose managed state (managed objects).
+        if (disposing)
+        {
+            _dbContext.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    #endregion
 }
