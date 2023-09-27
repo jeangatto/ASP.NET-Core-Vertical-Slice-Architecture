@@ -18,7 +18,7 @@ public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Res
         var post = await _repository.GetByIdAsync(request.Id);
         if (post == null)
         {
-            return Result<PostResponse>.NotFound($"No posts found by id = {request.Id}");
+            return Result.NotFound($"No posts found by id = {request.Id}");
         }
 
         var response = new PostResponse(
@@ -29,6 +29,6 @@ public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Res
             post.UpdatedAt,
             post.Tags.Select(tag => $"#{tag.Title}").ToList());
 
-        return Result<PostResponse>.Success(response);
+        return Result.Success(response);
     }
 }

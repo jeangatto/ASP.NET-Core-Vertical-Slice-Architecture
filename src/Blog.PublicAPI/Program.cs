@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +21,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddResponseCompression();
 
-builder.Services.AddDbContext<BlogContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(nameof(BlogContext)));
+var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
+keepAliveConnection.Open();
+
+builder.Services.AddDbContext<BlogContext>(optionsBuilder => optionsBuilder.UseSqlite(keepAliveConnection));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreatePostRequest>());
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePostRequestValidator>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
@@ -34,7 +38,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseResponseCompression();
 app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseHttpLogging();
 app.MapControllers();
+
+using var serviceScope = app.Services.CreateScope();
+using var dbContext = serviceScope.ServiceProvider.GetRequiredService<BlogContext>();
+dbContext.Database.EnsureCreated();
+
 app.Run();

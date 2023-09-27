@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result>
+public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result<Guid>>
 {
     private readonly IPostRepository _repository;
     private readonly IValidator<CreatePostRequest> _validator;
@@ -20,7 +21,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
         _validator = validator;
     }
 
-    public async Task<Result> Handle(CreatePostRequest request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
@@ -43,6 +44,6 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         await _repository.AddAsync(post);
 
-        return Result.Success();
+        return Result.Success(post.Id);
     }
 }
