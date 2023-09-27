@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
-using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using MediatR;
@@ -23,11 +23,9 @@ public class PostsController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(
-        [Required][FromBody] CreatePostRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([Required][FromBody] CreatePostRequest request)
     {
-        var result = await _mediator.Send(request, cancellationToken);
+        var result = await _mediator.Send(request);
         return result.IsSuccess ? Ok() : BadRequest(result.Errors);
     }
 
@@ -37,11 +35,9 @@ public class PostsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(
-        [Required][FromBody] UpdatePostRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([Required][FromBody] UpdatePostRequest request)
     {
-        var result = await _mediator.Send(request, cancellationToken);
+        var result = await _mediator.Send(request);
         if (result.IsSuccess)
         {
             return Ok();
@@ -56,4 +52,14 @@ public class PostsController : ControllerBase
         }
     }
 
+    [HttpGet("{id:guid}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById([Required][FromRoute] Guid id)
+    {
+        var result = await _mediator.Send(new GetPostByIdRequest(id));
+        return result.IsSuccess ? Ok(result.Value) : NotFound(result.Errors);
+    }
 }
