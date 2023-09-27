@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
+using Ardalis.Result;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,37 @@ public class PostsController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post(
-        [Required][FromBody] CreatePostRequest command,
+    public async Task<IActionResult> Create(
+        [Required][FromBody] CreatePostRequest request,
         CancellationToken cancellationToken)
     {
-        var respose = await _mediator.Send(command, cancellationToken);
-        return respose.IsSuccess ? Ok() : BadRequest(respose.Errors);
+        var result = await _mediator.Send(request, cancellationToken);
+        return result.IsSuccess ? Ok() : BadRequest(result.Errors);
     }
+
+    [HttpPut]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Post(
+        [Required][FromBody] UpdatePostRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(request, cancellationToken);
+        if (result.IsSuccess)
+        {
+            return Ok();
+        }
+        else if (result.Status == ResultStatus.NotFound)
+        {
+            return NotFound(result.Errors);
+        }
+        else
+        {
+            return BadRequest(result.Errors);
+        }
+    }
+
 }

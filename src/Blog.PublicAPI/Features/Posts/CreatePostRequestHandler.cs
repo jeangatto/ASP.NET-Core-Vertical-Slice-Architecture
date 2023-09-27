@@ -2,23 +2,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
-using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Domain.PostAggregate;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
 public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result>
 {
+    private readonly IPostRepository _repository;
     private readonly IValidator<CreatePostRequest> _validator;
-    private readonly BlogContext _dbContext;
 
-    public CreatePostRequestHandler(IValidator<CreatePostRequest> validator, BlogContext dbContext)
+    public CreatePostRequestHandler(IPostRepository repository, IValidator<CreatePostRequest> validator)
     {
+        _repository = repository;
         _validator = validator;
-        _dbContext = dbContext;
     }
 
     public async Task<Result> Handle(CreatePostRequest request, CancellationToken cancellationToken)
@@ -29,17 +27,14 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _dbContext.Posts.AsNoTracking()
-            .AnyAsync(post => post.Title == request.Title, cancellationToken))
+        if (await _repository.ExistsAsync(request.Title))
         {
             return Result.Error("There is already a registered post with the given title");
         }
 
         var post = Post.Create(request.Title, request.Content, request.Tags);
 
-        _dbContext.Posts.Add(post);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _repository.AddAsync(post);
 
         return Result.Success();
     }

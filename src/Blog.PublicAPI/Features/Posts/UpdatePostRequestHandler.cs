@@ -2,22 +2,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
-using Blog.PublicAPI.Data;
+using Blog.PublicAPI.Domain.PostAggregate;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
 public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Result>
 {
+    private readonly IPostRepository _repository;
     private readonly IValidator<UpdatePostRequest> _validator;
-    private readonly BlogContext _dbContext;
 
-    public UpdatePostRequestHandler(IValidator<UpdatePostRequest> validator, BlogContext dbContext)
+    public UpdatePostRequestHandler(IPostRepository repository, IValidator<UpdatePostRequest> validator)
     {
+        _repository = repository;
         _validator = validator;
-        _dbContext = dbContext;
     }
 
     public async Task<Result> Handle(UpdatePostRequest request, CancellationToken cancellationToken)
@@ -28,16 +27,12 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _dbContext.Posts.AsNoTracking()
-            .AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
+        if (await _repository.ExistsAsync(request.Title, request.Id))
         {
             return Result.Error("There is already a registered post with the given title");
         }
 
-        var post = await _dbContext.Posts
-            .Include(post => post.Tags)
-            .FirstOrDefaultAsync(post => post.Id == request.Id, cancellationToken: cancellationToken);
-
+        var post = await _repository.GetByIdAsync(request.Id);
         if (post == null)
         {
             return Result.NotFound($"No posts found by id = {request.Id}");
@@ -45,9 +40,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         post.Update(request.Title, request.Content, request.Tags);
 
-        _dbContext.Posts.Update(post);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _repository.UpdateAsync(post);
 
         return Result.Success();
     }
