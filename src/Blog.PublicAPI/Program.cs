@@ -27,6 +27,7 @@ keepAliveConnection.Open();
 builder.Services.AddDbContext<BlogContext>(optionsBuilder => optionsBuilder.UseSqlite(keepAliveConnection));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreatePostRequest>());
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePostRequestValidator>();
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<PostProfile>());
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 var app = builder.Build();

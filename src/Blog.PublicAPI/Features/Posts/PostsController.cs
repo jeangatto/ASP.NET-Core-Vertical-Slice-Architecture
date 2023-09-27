@@ -21,18 +21,18 @@ public class PostsController : ControllerBase
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([Required][FromBody] CreatePostRequest request)
     {
         var result = await _mediator.Send(request);
-        return result.IsSuccess ? Ok() : BadRequest(result.Errors);
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
     }
 
     [HttpPut]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([Required][FromBody] UpdatePostRequest request)
@@ -40,7 +40,7 @@ public class PostsController : ControllerBase
         var result = await _mediator.Send(request);
         if (result.IsSuccess)
         {
-            return Ok();
+            return Ok(result.Value);
         }
         else if (result.Status == ResultStatus.NotFound)
         {

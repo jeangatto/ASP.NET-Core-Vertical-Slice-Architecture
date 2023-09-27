@@ -1,27 +1,29 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
+using AutoMapper;
 using Blog.PublicAPI.Domain.PostAggregate;
 using FluentValidation;
 using MediatR;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result<Guid>>
+public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result<PostResponse>>
 {
+    private readonly IMapper _mapper;
     private readonly IPostRepository _repository;
     private readonly IValidator<CreatePostRequest> _validator;
 
-    public CreatePostRequestHandler(IPostRepository repository, IValidator<CreatePostRequest> validator)
+    public CreatePostRequestHandler(IMapper mapper, IPostRepository repository, IValidator<CreatePostRequest> validator)
     {
+        _mapper = mapper;
         _repository = repository;
         _validator = validator;
     }
 
-    public async Task<Result<Guid>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
+    public async Task<Result<PostResponse>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
@@ -40,10 +42,12 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             });
         }
 
-        var post = Post.Create(request.Title, request.Content, request.Tags);
+        var postDomain = Post.Create(request.Title, request.Content, request.Tags);
 
-        await _repository.AddAsync(post);
+        await _repository.AddAsync(postDomain);
 
-        return Result.Success(post.Id);
+        var response = _mapper.Map<PostResponse>(postDomain);
+
+        return Result.Success(response);
     }
 }
