@@ -42,12 +42,10 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             });
         }
 
-        var postDomain = Post.Create(request.Title, request.Content, request.Tags);
+        var post = Post.Create(request.Title, request.Content, request.Tags);
 
-        await _repository.AddAsync(postDomain);
+        await _repository.AddAsync(post);
 
-        var response = _mapper.Map<PostResponse>(postDomain);
-
-        return Result.Success(response);
+        return Result.Success(_mapper.Map<PostResponse>(post));
     }
 }

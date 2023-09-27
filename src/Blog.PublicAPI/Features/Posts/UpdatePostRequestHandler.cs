@@ -42,18 +42,16 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             });
         }
 
-        var postDomain = await _repository.GetByIdAsync(request.Id);
-        if (postDomain == null)
+        var post = await _repository.GetByIdAsync(request.Id);
+        if (post == null)
         {
             return Result.NotFound($"No posts found by id = {request.Id}");
         }
 
-        postDomain.Update(request.Title, request.Content, request.Tags);
+        post.Update(request.Title, request.Content, request.Tags);
 
-        await _repository.UpdateAsync(postDomain);
+        await _repository.UpdateAsync(post);
 
-        var response = _mapper.Map<PostResponse>(postDomain);
-
-        return Result.Success(response);
+        return Result.Success(_mapper.Map<PostResponse>(post));
     }
 }

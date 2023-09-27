@@ -20,14 +20,9 @@ public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Res
 
     public async Task<Result<PostResponse>> Handle(GetPostByIdRequest request, CancellationToken cancellationToken)
     {
-        var postDomain = await _repository.GetByIdAsync(request.Id);
-        if (postDomain == null)
-        {
-            return Result.NotFound($"No posts found by id = {request.Id}");
-        }
-
-        var response = _mapper.Map<PostResponse>(postDomain);
-
-        return Result.Success(response);
+        var post = await _repository.GetByIdAsync(request.Id);
+        return post == null
+            ? Result<PostResponse>.NotFound($"No posts found by id = {request.Id}")
+            : Result<PostResponse>.Success(_mapper.Map<PostResponse>(post));
     }
 }

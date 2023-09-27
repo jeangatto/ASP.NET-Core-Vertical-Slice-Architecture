@@ -1,3 +1,4 @@
+using AutoMapper;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Domain.PostAggregate;
 using Blog.PublicAPI.Features.Posts;
@@ -25,9 +26,12 @@ var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
 keepAliveConnection.Open();
 
 builder.Services.AddDbContext<BlogContext>(optionsBuilder => optionsBuilder.UseSqlite(keepAliveConnection));
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreatePostRequest>());
-builder.Services.AddValidatorsFromAssemblyContaining<CreatePostRequestValidator>();
-builder.Services.AddAutoMapper(cfg => cfg.AddProfile<PostProfile>());
+
+var assembliesToScan = typeof(Program).Assembly;
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembliesToScan));
+builder.Services.AddValidatorsFromAssembly(assembliesToScan);
+builder.Services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(assembliesToScan))));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 var app = builder.Build();
@@ -47,5 +51,9 @@ app.MapControllers();
 using var serviceScope = app.Services.CreateScope();
 using var dbContext = serviceScope.ServiceProvider.GetRequiredService<BlogContext>();
 dbContext.Database.EnsureCreated();
+
+var mapper = serviceScope.ServiceProvider.GetRequiredService<IMapper>();
+mapper.ConfigurationProvider.AssertConfigurationIsValid();
+mapper.ConfigurationProvider.CompileMappings();
 
 app.Run();
