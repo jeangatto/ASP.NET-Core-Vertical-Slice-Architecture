@@ -7,7 +7,8 @@ public class CreatePostRequestValidator : AbstractValidator<CreatePostRequest>
     public CreatePostRequestValidator()
     {
         RuleFor(request => request.Title)
-            .NotEmpty();
+            .NotEmpty()
+            .MaximumLength(100);
 
         RuleFor(request => request.Content)
             .NotEmpty();

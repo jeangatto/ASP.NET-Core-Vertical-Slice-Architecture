@@ -7,7 +7,8 @@ public class UpdatePostRequestValidator : AbstractValidator<UpdatePostRequest>
     public UpdatePostRequestValidator()
     {
         RuleFor(request => request.Title)
-            .NotEmpty();
+            .NotEmpty()
+            .MaximumLength(100);
 
         RuleFor(request => request.Content)
             .NotEmpty();
