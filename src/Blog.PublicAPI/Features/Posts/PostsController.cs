@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Ardalis.Result;
+using Ardalis.Result.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,44 +21,28 @@ public class PostsController : ControllerBase
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([Required][FromBody] CreatePostRequest request)
-    {
-        var result = await _mediator.Send(request);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Errors);
-    }
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<PostResponse>> Create([Required][FromBody] CreatePostRequest request) =>
+        (await _mediator.Send(request)).ToActionResult(this);
 
     [HttpPut]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post([Required][FromBody] UpdatePostRequest request)
-    {
-        var result = await _mediator.Send(request);
-        if (result.IsSuccess)
-        {
-            return Ok(result.Value);
-        }
-        else if (result.Status == ResultStatus.NotFound)
-        {
-            return NotFound(result.Errors);
-        }
-        else
-        {
-            return BadRequest(result.Errors);
-        }
-    }
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<PostResponse>> Post([Required][FromBody] UpdatePostRequest request) =>
+        (await _mediator.Send(request)).ToActionResult(this);
+
 
     [HttpGet("{id:guid}")]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById([Required][FromRoute] Guid id)
-    {
-        var result = await _mediator.Send(new GetPostByIdRequest(id));
-        return result.IsSuccess ? Ok(result.Value) : NotFound(result.Errors);
-    }
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<PostResponse>> GetById([Required][FromRoute] Guid id) =>
+        (await _mediator.Send(new GetPostByIdRequest(id))).ToActionResult(this);
 }

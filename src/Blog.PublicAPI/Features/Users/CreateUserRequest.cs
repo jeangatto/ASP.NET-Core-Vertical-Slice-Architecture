@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Blog.PublicAPI.Features.Users;
 
-public record CreateUserRequest(string Name, string UserName, string Email, string Password) : IRequest<Result<UserResponse>>;
+public record CreateUserRequest(string Name, string Email, string Password) : IRequest<Result<UserResponse>>;

@@ -33,13 +33,8 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         if (await _repository.ExistsAsync(request.Title, request.Id))
         {
-            return Result.Invalid(new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    ErrorMessage = "There is already a registered post with the given title"
-                }
-            });
+            var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
+            return Result.Invalid(new List<ValidationError> { validationError });
         }
 
         var post = await _repository.GetByIdAsync(request.Id);

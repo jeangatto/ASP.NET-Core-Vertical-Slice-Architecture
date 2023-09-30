@@ -33,13 +33,8 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         if (await _repository.ExistsAsync(request.Title))
         {
-            return Result.Invalid(new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    ErrorMessage = "There is already a registered post with the given title"
-                }
-            });
+            var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
+            return Result.Invalid(new List<ValidationError> { validationError });
         }
 
         var post = Post.Create(request.Title, request.Content, request.Tags);

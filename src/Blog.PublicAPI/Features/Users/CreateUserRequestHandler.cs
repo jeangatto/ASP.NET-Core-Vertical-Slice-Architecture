@@ -32,20 +32,17 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _repository.ExistsAsync(request.Email))
+        var email = request.Email.ToLowerInvariant();
+
+        if (await _repository.ExistsAsync(email))
         {
-            return Result.Invalid(new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    ErrorMessage = "The email address provided is already in use"
-                }
-            });
+            var validationError = new ValidationError { ErrorMessage = "The email address provided is already in use" };
+            return Result.Invalid(new List<ValidationError> { validationError });
         }
 
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);
 
-        var user = User.Create(request.Name, request.Email, hashedPassword);
+        var user = User.Create(request.Name, email, hashedPassword);
 
         await _repository.AddAsync(user);
 
