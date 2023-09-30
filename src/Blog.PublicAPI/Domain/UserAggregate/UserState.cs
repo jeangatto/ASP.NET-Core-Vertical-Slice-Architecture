@@ -1,6 +1,6 @@
 namespace Blog.PublicAPI.Domain.UserAggregate;
 
-public enum EUserState
+public enum UserState
 {
     Active = 1,
     Inactive = 2

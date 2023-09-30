@@ -16,5 +16,15 @@ public abstract class EfRepositoryBase<TEntity> where TEntity : class, IAggregat
 
     protected DbSet<TEntity> DbSet { get; private init; }
 
-    protected async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
+    public async Task AddAsync(TEntity entity)
+    {
+        DbSet.Add(entity);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(TEntity entity)
+    {
+        DbSet.Update(entity);
+        await _dbContext.SaveChangesAsync();
+    }
 }

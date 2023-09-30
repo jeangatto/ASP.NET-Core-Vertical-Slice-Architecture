@@ -1,4 +1,5 @@
 using System.Reflection;
+using Blog.PublicAPI.Data.Extensions;
 using Blog.PublicAPI.Domain.PostAggregate;
 using Blog.PublicAPI.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,8 @@ public class BlogContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            .ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())
+            .RemoveCascadeDeleteConvention();
 
         base.OnModelCreating(modelBuilder);
     }

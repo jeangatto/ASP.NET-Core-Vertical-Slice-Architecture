@@ -22,11 +22,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(150);
 
         builder
-            .Property(user => user.UserName)
-            .IsRequired()
-            .HasMaxLength(20);
-
-        builder
             .Property(user => user.Email)
             .IsRequired()
             .HasMaxLength(250);
@@ -40,10 +35,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .Property(user => user.CreatedAt)
             .IsRequired()
             .ValueGeneratedNever();
-
-        builder
-            .HasIndex(user => user.UserName)
-            .IsUnique();
 
         builder
             .HasIndex(user => user.Email)

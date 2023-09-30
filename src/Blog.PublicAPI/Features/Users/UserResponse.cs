@@ -2,4 +2,10 @@ using System;
 
 namespace Blog.PublicAPI.Features.Users;
 
-public record UserResponse(Guid Id, string Name, string UserName, string Email, DateTime CreatedAt);
+public class UserResponse
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
