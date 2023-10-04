@@ -4,22 +4,23 @@ using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
 using AutoMapper;
-using Blog.PublicAPI.Domain.PostAggregate;
+using Blog.PublicAPI.Data;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
 public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Result<PostResponse>>
 {
+    private readonly BlogContext _context;
     private readonly IMapper _mapper;
-    private readonly IPostRepository _repository;
     private readonly IValidator<UpdatePostRequest> _validator;
 
-    public UpdatePostRequestHandler(IMapper mapper, IPostRepository repository, IValidator<UpdatePostRequest> validator)
+    public UpdatePostRequestHandler(BlogContext context, IMapper mapper, IValidator<UpdatePostRequest> validator)
     {
+        _context = context;
         _mapper = mapper;
-        _repository = repository;
         _validator = validator;
     }
 
@@ -31,13 +32,13 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _repository.ExistsAsync(request.Title, request.Id))
+        if (await _context.Posts.AnyAsync(post => post.Title == request.Title && post.Id != request.Id))
         {
             var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
             return Result.Invalid(new List<ValidationError> { validationError });
         }
 
-        var post = await _repository.GetByIdAsync(request.Id);
+        var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
         if (post == null)
         {
             return Result.NotFound($"No posts found by id = {request.Id}");
@@ -45,7 +46,8 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         post.Update(request.Title, request.Content, request.Tags);
 
-        await _repository.UpdateAsync(post);
+        _context.Update(post);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success(_mapper.Map<PostResponse>(post));
     }

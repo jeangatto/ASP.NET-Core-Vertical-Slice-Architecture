@@ -5,22 +5,24 @@ using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
 using AutoMapper;
 using BCrypt.Net;
+using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Domain.UserAggregate;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Users;
 
 public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Result<UserResponse>>
 {
+    private readonly BlogContext _context;
     private readonly IMapper _mapper;
-    private readonly IUserRepository _repository;
     private readonly IValidator<CreateUserRequest> _validator;
 
-    public CreateUserRequestHandler(IMapper mapper, IUserRepository repository, IValidator<CreateUserRequest> validator)
+    public CreateUserRequestHandler(BlogContext context, IMapper mapper, IValidator<CreateUserRequest> validator)
     {
+        _context = context;
         _mapper = mapper;
-        _repository = repository;
         _validator = validator;
     }
 
@@ -34,7 +36,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         var email = request.Email.ToLowerInvariant();
 
-        if (await _repository.ExistsAsync(email))
+        if (await _context.Users.AnyAsync(user => user.Email == email, cancellationToken: cancellationToken))
         {
             var validationError = new ValidationError { ErrorMessage = "The email address provided is already in use" };
             return Result.Invalid(new List<ValidationError> { validationError });
@@ -44,7 +46,8 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         var user = User.Create(request.Name, email, hashedPassword);
 
-        await _repository.AddAsync(user);
+        _context.Add(user);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success(_mapper.Map<UserResponse>(user));
     }

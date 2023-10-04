@@ -1,11 +1,8 @@
+using System.Data.Common;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Blog.PublicAPI.Data;
-using Blog.PublicAPI.Domain.PostAggregate;
-using Blog.PublicAPI.Domain.UserAggregate;
-using Blog.PublicAPI.Features.Posts;
-using Blog.PublicAPI.Features.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,9 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<KestrelServerOptions>(options => options.AddServerHeader = false);
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
+builder.Services.AddResponseCompression();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddResponseCompression();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(options =>
@@ -36,18 +33,25 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
     });
 
-var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
-keepAliveConnection.Open();
+builder.Services.AddSingleton<DbConnection>(_ =>
+{
+    var connection = new SqliteConnection("DataSource=:memory:");
+    connection.Open();
+    return connection;
+});
 
-builder.Services.AddDbContext<BlogContext>(optionsBuilder => optionsBuilder.UseSqlite(keepAliveConnection));
+builder.Services.AddDbContext<BlogContext>((serviceProvider, optionsBuilder) =>
+{
+    var connection = serviceProvider.GetRequiredService<DbConnection>();
+    optionsBuilder.UseSqlite(connection);
+    optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+});
 
 var assembliesToScan = typeof(Program).Assembly;
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembliesToScan));
 builder.Services.AddValidatorsFromAssembly(assembliesToScan);
 builder.Services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(assembliesToScan))));
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
