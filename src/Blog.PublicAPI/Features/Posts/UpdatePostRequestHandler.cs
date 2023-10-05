@@ -38,7 +38,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             return Result.Invalid(new List<ValidationError> { validationError });
         }
 
-        var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+        var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken);
         if (post == null)
         {
             return Result.NotFound($"No posts found by id = {request.Id}");

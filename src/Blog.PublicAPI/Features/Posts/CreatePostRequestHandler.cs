@@ -33,7 +33,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _context.Posts.AnyAsync(post => post.Title == request.Title, cancellationToken: cancellationToken))
+        if (await _context.Posts.AnyAsync(post => post.Title == request.Title, cancellationToken))
         {
             var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
             return Result.Invalid(new List<ValidationError> { validationError });
