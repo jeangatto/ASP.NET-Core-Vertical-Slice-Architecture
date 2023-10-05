@@ -48,7 +48,6 @@ builder.Services.AddDbContext<BlogContext>((serviceProvider, optionsBuilder) =>
 });
 
 var assembliesToScan = typeof(Program).Assembly;
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembliesToScan));
 builder.Services.AddValidatorsFromAssembly(assembliesToScan);
 builder.Services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(assembliesToScan))));

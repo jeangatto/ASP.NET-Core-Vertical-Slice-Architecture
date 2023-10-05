@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
@@ -38,8 +37,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         if (await _context.Users.AnyAsync(user => user.Email == email, cancellationToken))
         {
-            var validationError = new ValidationError { ErrorMessage = "The email address provided is already in use" };
-            return Result.Invalid(new List<ValidationError> { validationError });
+            return Result.Conflict("The email address provided is already in use");
         }
 
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);

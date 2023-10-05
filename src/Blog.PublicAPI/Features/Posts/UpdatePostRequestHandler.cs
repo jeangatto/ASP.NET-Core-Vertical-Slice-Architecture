@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
@@ -32,10 +31,9 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             return Result.Invalid(result.AsErrors());
         }
 
-        if (await _context.Posts.AnyAsync(post => post.Title == request.Title && post.Id != request.Id))
+        if (await _context.Posts.AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
         {
-            var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
-            return Result.Invalid(new List<ValidationError> { validationError });
+            return Result.Conflict("There is already a registered post with the given title");
         }
 
         var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken);

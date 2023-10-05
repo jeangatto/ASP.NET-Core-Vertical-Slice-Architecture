@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
@@ -35,8 +34,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         if (await _context.Posts.AnyAsync(post => post.Title == request.Title, cancellationToken))
         {
-            var validationError = new ValidationError { ErrorMessage = "There is already a registered post with the given title" };
-            return Result.Invalid(new List<ValidationError> { validationError });
+            return Result.Conflict("There is already a registered post with the given title");
         }
 
         var post = Post.Create(request.Title, request.Content, request.Tags);
