@@ -35,7 +35,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         var email = request.Email.ToLowerInvariant();
 
-        if (await _context.Users.AnyAsync(user => user.Email == email, cancellationToken))
+        if (await _context.Users.AsNoTracking().AnyAsync(user => user.Email == email, cancellationToken))
         {
             return Result.Conflict("The email address provided is already in use");
         }

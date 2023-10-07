@@ -23,7 +23,6 @@ public static class ServiceCollectionExtensions
         {
             var connection = serviceProvider.GetRequiredService<DbConnection>();
             optionsBuilder.UseSqlite(connection);
-            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
         });
     }
 
