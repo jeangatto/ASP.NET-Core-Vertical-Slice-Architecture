@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Ardalis.Result.AspNetCore;
@@ -22,18 +21,20 @@ public class PostsController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PostResponse>> Create([Required][FromBody] CreatePostRequest request) =>
+    public async Task<ActionResult<PostResponse>> Create([FromBody] CreatePostRequest request) =>
         (await _mediator.Send(request)).ToActionResult(this);
 
     [HttpPut]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PostResponse>> Post([Required][FromBody] UpdatePostRequest request) =>
+    public async Task<ActionResult<PostResponse>> Update([FromBody] UpdatePostRequest request) =>
         (await _mediator.Send(request)).ToActionResult(this);
 
 
@@ -43,6 +44,6 @@ public class PostsController : ControllerBase
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PostResponse>> GetById([Required][FromRoute] Guid id) =>
+    public async Task<ActionResult<PostResponse>> GetById([FromRoute] Guid id) =>
         (await _mediator.Send(new GetPostByIdRequest(id))).ToActionResult(this);
 }

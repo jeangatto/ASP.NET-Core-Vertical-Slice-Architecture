@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Ardalis.Result.AspNetCore;
@@ -21,7 +20,8 @@ public class UsersController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> Create([Required][FromBody] CreateUserRequest request) =>
+    public async Task<ActionResult<UserResponse>> Create([FromBody] CreateUserRequest request) =>
         (await _mediator.Send(request)).ToActionResult(this);
 }
