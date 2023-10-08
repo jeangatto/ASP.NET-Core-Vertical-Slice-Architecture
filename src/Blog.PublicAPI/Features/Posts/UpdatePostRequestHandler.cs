@@ -33,7 +33,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         if (await _context.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
         {
-            return Result.Conflict("There is already a registered post with the given title");
+            return Result.Conflict("There is already a post with the given title.");
         }
 
         var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken);

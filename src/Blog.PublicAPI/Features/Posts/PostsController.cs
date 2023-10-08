@@ -3,6 +3,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Ardalis.Result.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ public class PostsController : ControllerBase
     public PostsController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
+    [Authorize]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
@@ -27,6 +29,7 @@ public class PostsController : ControllerBase
         (await _mediator.Send(request)).ToActionResult(this);
 
     [HttpPut]
+    [Authorize]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]

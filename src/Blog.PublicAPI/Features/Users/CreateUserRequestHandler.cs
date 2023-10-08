@@ -37,7 +37,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         if (await _context.Users.AsNoTracking().AnyAsync(user => user.Email == email, cancellationToken))
         {
-            return Result.Conflict("The email address provided is already in use");
+            return Result.Conflict("The email address provided is already in use.");
         }
 
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);

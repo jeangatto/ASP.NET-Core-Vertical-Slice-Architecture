@@ -34,7 +34,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         if (await _context.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title, cancellationToken))
         {
-            return Result.Conflict("There is already a registered post with the given title");
+            return Result.Conflict("There is already a post with the given title.");
         }
 
         var post = Post.Create(request.Title, request.Content, request.Tags);
