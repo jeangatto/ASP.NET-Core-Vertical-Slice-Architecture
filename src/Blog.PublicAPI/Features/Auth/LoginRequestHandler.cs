@@ -46,7 +46,7 @@ public class LoginRequestHandler : IRequestHandler<LoginRequest, Result<TokenRes
 
         if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.HashedPassword))
         {
-            var validatorError = new ValidationError { ErrorMessage = "E-mail or password is incorrect." };
+            var validatorError = new ValidationError { ErrorMessage = "Email or password is incorrect." };
             return Result.Invalid(new List<ValidationError> { validatorError });
         }
 
