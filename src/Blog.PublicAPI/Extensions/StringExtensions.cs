@@ -7,7 +7,7 @@ public static partial class StringExtensions
     private static readonly Regex PeplaceSpecialWordsRegex = PeplaceSpecialWordsRegexAttr();
     private static readonly Regex RemoveMultipleSpacesRegex = RemoveMultipleSpacesRegexAttr();
 
-    public static string UrlFriendly(this string title)
+    public static string ToUrlFriendly(this string title)
     {
         var titlePeplaceSpecialWords = PeplaceSpecialWordsRegex.Replace(title, " ").Trim();
         var removeMutipleSpaces = RemoveMultipleSpacesRegex.Replace(titlePeplaceSpecialWords, " ");
