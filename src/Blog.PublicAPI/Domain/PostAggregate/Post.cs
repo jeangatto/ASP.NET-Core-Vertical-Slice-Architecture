@@ -12,9 +12,10 @@ public class Post : IEntity<Guid>, IAggregateRoot
     {
     }
 
-    private Post(string title, string content, string[] tags)
+    private Post(Guid authorId, string title, string content, string[] tags)
     {
         Id = Guid.NewGuid();
+        AuthorId = authorId;
         Title = title;
         Content = content;
         CreatedAt = DateTime.UtcNow;
@@ -32,13 +33,14 @@ public class Post : IEntity<Guid>, IAggregateRoot
     public Author Author { get; private set; }
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
 
-    public static Post Create(string title, string content, string[] tags)
+    public static Post Create(Guid authorId, string title, string content, string[] tags)
     {
+        ArgumentNullException.ThrowIfNull(authorId, nameof(authorId));
         ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
         ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
         ArgumentNullException.ThrowIfNull(tags, nameof(tags));
 
-        return new Post(title, content, tags);
+        return new Post(authorId, title, content, tags);
     }
 
     public void Update(string title, string content, string[] tags)
@@ -61,7 +63,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
         var newTags = tags
             .Distinct()
             .OrderBy(tag => tag)
-            .Select(tag => new Tag(Id, tag))
+            .Select(tag => Tag.Create(Id, tag))
             .ToList();
 
         _tags.AddRange(newTags);

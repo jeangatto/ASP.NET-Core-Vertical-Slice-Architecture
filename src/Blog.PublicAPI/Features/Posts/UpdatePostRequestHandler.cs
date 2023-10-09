@@ -28,7 +28,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
-            return Result.Invalid(result.AsErrors());
+            return Result<PostResponse>.Invalid(result.AsErrors());
         }
 
         if (await _context.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
@@ -39,7 +39,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
         var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken);
         if (post == null)
         {
-            return Result.NotFound($"No posts found by id = {request.Id}");
+            return Result<PostResponse>.NotFound($"No posts found by id = {request.Id}");
         }
 
         post.Update(request.Title, request.Content, request.Tags);

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using Ardalis.Result.FluentValidation;
+using BCrypt.Net;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Domain.UserAggregate;
 using Blog.PublicAPI.SharedKernel;
@@ -38,7 +39,7 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
-            return Result.Invalid(result.AsErrors());
+            return Result<TokenResponse>.Invalid(result.AsErrors());
         }
 
         var email = request.Email.ToLowerInvariant();
@@ -49,26 +50,28 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
 
         if (user == null)
         {
-            return Result.NotFound("User not found");
+            return Result<TokenResponse>.NotFound("User not found");
         }
 
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.HashedPassword))
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password.Trim(), user.HashedPassword, HashType.SHA512))
         {
-            var validatorError = new ValidationError { ErrorMessage = "Email or password is incorrect." };
-            return Result.Invalid(new List<ValidationError> { validatorError });
+            var validatorError = new ValidationError { Identifier = "Email", ErrorMessage = "Email or password is incorrect." };
+            return Result<TokenResponse>.Invalid(new List<ValidationError> { validatorError });
         }
 
         var claims = GenerateClaims(user);
 
         var accessToken = CreateAccessToken(claims);
 
-        var expiresIn = TimeSpan.FromSeconds(_jwtOptions.ExpirationSeconds);
-
-        return Result.Success(new TokenResponse(accessToken, (int)expiresIn.TotalSeconds));
+        return Result.Success(new TokenResponse(accessToken, _jwtOptions.ExpirationSeconds));
     }
 
     private string CreateAccessToken(Claim[] claims)
     {
+        var createdAt = DateTime.UtcNow;
+
+        var expiresAt = createdAt.AddSeconds(_jwtOptions.ExpirationSeconds);
+
         var keyBytes = Encoding.UTF8.GetBytes(_jwtOptions.SigningKey);
 
         var symmetricSecurityKey = new SymmetricSecurityKey(keyBytes);
@@ -79,7 +82,7 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
             issuer: _jwtOptions.Issuer,
             audience: _jwtOptions.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddSeconds(_jwtOptions.ExpirationSeconds),
+            expires: expiresAt,
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);

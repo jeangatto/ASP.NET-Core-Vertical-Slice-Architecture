@@ -5,6 +5,7 @@ using Ardalis.Result.FluentValidation;
 using AutoMapper;
 using BCrypt.Net;
 using Blog.PublicAPI.Data;
+using Blog.PublicAPI.Domain.PostAggregate;
 using Blog.PublicAPI.Domain.UserAggregate;
 using FluentValidation;
 using MediatR;
@@ -30,21 +31,26 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
-            return Result.Invalid(result.AsErrors());
+            return Result<UserResponse>.Invalid(result.AsErrors());
         }
 
         var email = request.Email.ToLowerInvariant();
 
         if (await _context.Users.AsNoTracking().AnyAsync(user => user.Email == email, cancellationToken))
         {
-            return Result.Conflict("The email address provided is already in use.");
+            return Result<UserResponse>.Conflict("The email address provided is already in use.");
         }
 
-        var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);
+        var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password.Trim(), HashType.SHA512);
 
         var user = User.Create(request.Name, email, hashedPassword);
 
         _context.Add(user);
+
+        var author = Author.Create(user.Id, request.Name);
+
+        _context.Add(author);
+
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success(_mapper.Map<UserResponse>(user));
