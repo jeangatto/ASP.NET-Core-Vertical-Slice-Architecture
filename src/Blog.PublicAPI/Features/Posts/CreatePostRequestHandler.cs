@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,6 +35,16 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
     public async Task<Result<PostResponse>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
+        if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        {
+            return Result<PostResponse>.Unauthorized();
+        }
+
+        if (!_httpContextAccessor.HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.NameIdentifier))
+        {
+            return Result<PostResponse>.Forbidden();
+        }
+
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
@@ -47,7 +56,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             return Result<PostResponse>.Conflict("There is already a post with the given title.");
         }
 
-        var claim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+        var claim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
 
         var userId = Guid.Parse(claim.Value);
 

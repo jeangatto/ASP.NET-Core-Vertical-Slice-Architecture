@@ -4,6 +4,7 @@ using Ardalis.Result;
 using AutoMapper;
 using Blog.PublicAPI.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
@@ -20,7 +21,10 @@ public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Res
 
     public async Task<Result<PostResponse>> Handle(GetPostByIdRequest request, CancellationToken cancellationToken)
     {
-        var post = await _context.Posts.FindAsync(new object[] { request.Id }, cancellationToken);
+        var post = await _context.Posts
+            .AsNoTracking()
+            .FirstOrDefaultAsync(post => post.Id == request.Id, cancellationToken);
+
         return post == null
             ? Result<PostResponse>.NotFound($"No posts found by id = {request.Id}")
             : Result<PostResponse>.Success(_mapper.Map<PostResponse>(post));
