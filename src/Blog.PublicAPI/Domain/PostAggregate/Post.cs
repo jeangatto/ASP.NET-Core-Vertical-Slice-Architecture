@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Blog.PublicAPI.Extensions;
 
 namespace Blog.PublicAPI.Domain.PostAggregate;
 
@@ -17,6 +18,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
         Id = Guid.NewGuid();
         AuthorId = authorId;
         Title = title;
+        TitleUrlFriendly = title.UrlFriendly();
         Content = content;
         CreatedAt = DateTime.UtcNow;
 
@@ -26,6 +28,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
     public Guid Id { get; }
     public Guid AuthorId { get; private set; }
     public string Title { get; private set; }
+    public string TitleUrlFriendly { get; private set; }
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }

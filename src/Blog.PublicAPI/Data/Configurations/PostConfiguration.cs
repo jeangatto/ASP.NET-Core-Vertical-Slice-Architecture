@@ -26,6 +26,11 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .HasMaxLength(100);
 
         builder
+            .Property(post => post.TitleUrlFriendly)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder
             .Property(post => post.Content)
             .IsRequired();
 
