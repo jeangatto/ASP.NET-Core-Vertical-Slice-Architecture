@@ -72,5 +72,6 @@ public class Post : IEntity<Guid>, IAggregateRoot
         _tags.AddRange(newTags);
     }
 
-    public override string ToString() => $"Id = {Id}, Title = {Title}, Tags = {string.Join(",", Tags)}";
+    public override string ToString() =>
+        $"Id = {Id}, Title = {Title}, TitleUrlFriendly = {TitleUrlFriendly}, Tags = {string.Join(",", Tags)}";
 }

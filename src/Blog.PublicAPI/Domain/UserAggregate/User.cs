@@ -4,6 +4,10 @@ namespace Blog.PublicAPI.Domain.UserAggregate;
 
 public class User : IEntity<Guid>, IAggregateRoot
 {
+    public User()
+    {
+    }
+
     private User(string name, string email, string hashedPassword, UserState state)
     {
         Id = Guid.NewGuid();
@@ -12,10 +16,6 @@ public class User : IEntity<Guid>, IAggregateRoot
         HashedPassword = hashedPassword;
         State = state;
         CreatedAt = DateTime.UtcNow;
-    }
-
-    public User()
-    {
     }
 
     public Guid Id { get; }

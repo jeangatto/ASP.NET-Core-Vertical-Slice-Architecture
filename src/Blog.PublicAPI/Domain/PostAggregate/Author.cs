@@ -4,14 +4,14 @@ namespace Blog.PublicAPI.Domain.PostAggregate;
 
 public class Author : IEntity<Guid>
 {
+    public Author()
+    {
+    }
+
     private Author(Guid userId, string name)
     {
         Id = userId;
         Name = name;
-    }
-
-    public Author()
-    {
     }
 
     public Guid Id { get; }
