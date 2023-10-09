@@ -18,7 +18,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
         Id = Guid.NewGuid();
         AuthorId = authorId;
         Title = title;
-        TitleUrlFriendly = title.ToUrlFriendly();
+        TitleUrlFriendly = $"{title.ToUrlFriendly()}-{Id:D}";
         Content = content;
         CreatedAt = DateTime.UtcNow;
 
