@@ -26,12 +26,20 @@ builder.Services.Configure<JsonOptions>(jsonOptions =>
     jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddResponseCompression();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
+{
+    serviceProviderOptions.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+    serviceProviderOptions.ValidateOnBuild = true;
+});
+
 // Application Services
+builder.Services.ConfigureJwtBearer(builder.Configuration);
+builder.Services.ConfigureSwagger();
 builder.Services.AddBlogContext();
 builder.Services.AddFeatures();
 
@@ -47,6 +55,8 @@ if (app.Environment.IsDevelopment())
 app.UseResponseCompression();
 app.UseHttpsRedirection();
 app.UseHttpLogging();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 await using var serviceScope = app.Services.CreateAsyncScope();

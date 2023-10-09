@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace Blog.PublicAPI.Features.Auth;
+namespace Blog.PublicAPI.Features.Authentication;
 
-public class LoginRequestValidator : AbstractValidator<LoginRequest>
+public class AuthenticationRequestValidator : AbstractValidator<AuthenticationRequest>
 {
-    public LoginRequestValidator()
+    public AuthenticationRequestValidator()
     {
         RuleFor(request => request.Email)
             .NotEmpty()

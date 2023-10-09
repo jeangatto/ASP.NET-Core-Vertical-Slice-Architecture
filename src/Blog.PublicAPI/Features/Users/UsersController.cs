@@ -2,6 +2,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Ardalis.Result.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ public class UsersController : ControllerBase
     public UsersController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
+    [AllowAnonymous]
     [Consumes(MediaTypeNames.Application.Json)]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
