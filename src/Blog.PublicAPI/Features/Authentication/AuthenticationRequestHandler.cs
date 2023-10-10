@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -53,10 +52,9 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
             return Result<TokenResponse>.NotFound("User not found");
         }
 
-        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password.Trim(), user.HashedPassword, HashType.SHA512))
+        if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.HashedPassword, HashType.SHA512))
         {
-            var validatorError = new ValidationError { Identifier = "Email", ErrorMessage = "Email or password is incorrect." };
-            return Result<TokenResponse>.Invalid(new List<ValidationError> { validatorError });
+            return Result<TokenResponse>.Error("Email or password is incorrect.");
         }
 
         var claims = GenerateClaims(user);
@@ -69,6 +67,7 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
     private static Claim[] GenerateClaims(User user)
     {
         var identifier = user.Id.ToString();
+
         return new[]
         {
             new Claim(ClaimTypes.NameIdentifier, identifier),

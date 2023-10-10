@@ -41,7 +41,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
             return Result<UserResponse>.Conflict("The email address provided is already in use.");
         }
 
-        var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password.Trim(), HashType.SHA512);
+        var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);
 
         var user = User.Create(request.Name, email, hashedPassword);
 
