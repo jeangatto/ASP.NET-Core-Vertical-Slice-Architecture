@@ -25,7 +25,7 @@ public class StringExtensionsTests
     public void Should_ThrowArgumentNullException_When_TitleIsNull()
     {
         // Arrange
-        string title = null;
+        const string title = null;
 
         // Act
         var act = title.ToUrlFriendly;

@@ -26,14 +26,14 @@ public class Post : IEntity<Guid>, IAggregateRoot
     }
 
     public Guid Id { get; }
-    public Guid AuthorId { get; private set; }
+    public Guid AuthorId { get; private init; }
     public string Title { get; private set; }
-    public string TitleUrlFriendly { get; private set; }
+    public string TitleUrlFriendly { get; private init; }
     public string Content { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private init; }
     public DateTime? UpdatedAt { get; private set; }
 
-    public Author Author { get; private set; }
+    public Author Author { get; private init; }
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
 
     public static Post Create(Guid authorId, string title, string content, string[] tags)

@@ -16,7 +16,6 @@ public class BlogContext : DbContext
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<User> Users => Set<User>();
 
-
     public override ChangeTracker ChangeTracker
     {
         get

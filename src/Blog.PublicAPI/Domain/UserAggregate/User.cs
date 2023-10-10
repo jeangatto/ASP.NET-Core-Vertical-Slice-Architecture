@@ -19,11 +19,11 @@ public class User : IEntity<Guid>, IAggregateRoot
     }
 
     public Guid Id { get; }
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-    public string HashedPassword { get; private set; }
-    public UserState State { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public string Name { get; private init; }
+    public string Email { get; private init; }
+    public string HashedPassword { get; private init; }
+    public UserState State { get; private init; }
+    public DateTime CreatedAt { get; private init; }
 
     public static User Create(string name, string email, string hashedPassword)
     {

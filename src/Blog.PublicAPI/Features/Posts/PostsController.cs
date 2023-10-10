@@ -41,7 +41,6 @@ public class PostsController : ControllerBase
     public async Task<ActionResult<PostResponse>> Update([FromBody] UpdatePostRequest request) =>
         (await _mediator.Send(request)).ToActionResult(this);
 
-
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     [Consumes(MediaTypeNames.Application.Json)]
