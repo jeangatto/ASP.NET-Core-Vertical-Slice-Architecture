@@ -66,6 +66,18 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
         return Result.Success(new TokenResponse(accessToken, _jwtOptions.ExpirationSeconds));
     }
 
+    private static Claim[] GenerateClaims(User user)
+    {
+        var identifier = user.Id.ToString();
+        return new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, identifier),
+            new Claim(JwtRegisteredClaimNames.UniqueName, identifier),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Name, ClaimValueTypes.String),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+    }
+
     private string CreateAccessToken(Claim[] claims)
     {
         var createdAt = DateTime.UtcNow;
@@ -86,17 +98,5 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-    }
-
-    private static Claim[] GenerateClaims(User user)
-    {
-        var identifier = user.Id.ToString();
-        return new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, identifier),
-            new Claim(JwtRegisteredClaimNames.UniqueName, identifier),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Name, ClaimValueTypes.String),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
     }
 }
