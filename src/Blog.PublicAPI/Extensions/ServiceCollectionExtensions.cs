@@ -20,6 +20,9 @@ namespace Blog.PublicAPI.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    private const string ConnectionString = "DataSource=:memory:";
+    private const string SecurityScheme = "Bearer";
+
     public static void ConfigureJwtBearer(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtOptions = configuration
@@ -61,13 +64,13 @@ public static class ServiceCollectionExtensions
                 Description = "ASP.NET Core C# Vertical Slice Architecture, CQRS, REST API, DDD, SOLID Principles"
             });
 
-            swaggerOptions.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            swaggerOptions.AddSecurityDefinition(SecurityScheme, new OpenApiSecurityScheme
             {
                 Description = "Standard authorisation using the Bearer scheme. Example: \"Bearer {token}\"",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
+                Scheme = SecurityScheme,
                 BearerFormat = "JWT"
             });
 
@@ -79,7 +82,7 @@ public static class ServiceCollectionExtensions
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            Id = SecurityScheme
                         }
                     },
                     Array.Empty<string>()
@@ -99,16 +102,13 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<DbConnection>(_ =>
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
+            var connection = new SqliteConnection(ConnectionString);
             connection.Open();
             return connection;
         });
 
         services.AddDbContext<BlogDbContext>((serviceProvider, optionsBuilder) =>
-        {
-            var connection = serviceProvider.GetRequiredService<DbConnection>();
-            optionsBuilder.UseSqlite(connection);
-        });
+            optionsBuilder.UseSqlite(serviceProvider.GetRequiredService<DbConnection>()));
     }
 
     public static void AddFeatures(this IServiceCollection services)
