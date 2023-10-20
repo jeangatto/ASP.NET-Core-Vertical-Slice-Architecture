@@ -95,7 +95,7 @@ public static class ServiceCollectionExtensions
         });
     }
 
-    public static void AddBlogContext(this IServiceCollection services)
+    public static void AddBlogDbContext(this IServiceCollection services)
     {
         services.AddSingleton<DbConnection>(_ =>
         {
@@ -104,7 +104,7 @@ public static class ServiceCollectionExtensions
             return connection;
         });
 
-        services.AddDbContext<BlogContext>((serviceProvider, optionsBuilder) =>
+        services.AddDbContext<BlogDbContext>((serviceProvider, optionsBuilder) =>
         {
             var connection = serviceProvider.GetRequiredService<DbConnection>();
             optionsBuilder.UseSqlite(connection);

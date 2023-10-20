@@ -15,11 +15,11 @@ namespace Blog.PublicAPI.Features.Users;
 
 public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Result<UserResponse>>
 {
-    private readonly BlogContext _context;
+    private readonly BlogDbContext _context;
     private readonly IMapper _mapper;
     private readonly IValidator<CreateUserRequest> _validator;
 
-    public CreateUserRequestHandler(BlogContext context, IMapper mapper, IValidator<CreateUserRequest> validator)
+    public CreateUserRequestHandler(BlogDbContext context, IMapper mapper, IValidator<CreateUserRequest> validator)
     {
         _context = context;
         _mapper = mapper;

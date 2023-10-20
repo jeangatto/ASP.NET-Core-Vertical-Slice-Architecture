@@ -10,18 +10,18 @@ namespace Blog.PublicAPI.Features.Posts;
 
 public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Result<PostResponse>>
 {
-    private readonly BlogContext _context;
+    private readonly BlogDbContext _dbContext;
     private readonly IMapper _mapper;
 
-    public GetPostByIdRequestHandler(BlogContext context, IMapper mapper)
+    public GetPostByIdRequestHandler(BlogDbContext dbContext, IMapper mapper)
     {
-        _context = context;
+        _dbContext = dbContext;
         _mapper = mapper;
     }
 
     public async Task<Result<PostResponse>> Handle(GetPostByIdRequest request, CancellationToken cancellationToken)
     {
-        var post = await _context.Posts
+        var post = await _dbContext.Posts
             .AsNoTracking()
             .FirstOrDefaultAsync(post => post.Id == request.Id, cancellationToken);
 

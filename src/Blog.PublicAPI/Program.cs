@@ -40,7 +40,7 @@ builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
 // Application Services
 builder.Services.ConfigureJwtBearer(builder.Configuration);
 builder.Services.ConfigureSwagger();
-builder.Services.AddBlogContext();
+builder.Services.AddBlogDbContext();
 builder.Services.AddFeatures();
 
 var app = builder.Build();
@@ -60,7 +60,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 await using var serviceScope = app.Services.CreateAsyncScope();
-await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<BlogContext>();
+await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<BlogDbContext>();
 await dbContext.Database.EnsureCreatedAsync();
 
 var mapper = serviceScope.ServiceProvider.GetRequiredService<IMapper>();

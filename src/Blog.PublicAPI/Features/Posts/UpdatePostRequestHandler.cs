@@ -15,18 +15,18 @@ namespace Blog.PublicAPI.Features.Posts;
 
 public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Result<PostResponse>>
 {
-    private readonly BlogContext _context;
+    private readonly BlogDbContext _dbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
     private readonly IValidator<UpdatePostRequest> _validator;
 
     public UpdatePostRequestHandler(
-        BlogContext context,
+        BlogDbContext dbContext,
         IHttpContextAccessor httpContextAccessor,
         IMapper mapper,
         IValidator<UpdatePostRequest> validator)
     {
-        _context = context;
+        _dbContext = dbContext;
         _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
         _validator = validator;
@@ -50,7 +50,9 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
             return Result<PostResponse>.Invalid(result.AsErrors());
         }
 
-        if (await _context.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
+        if (await _dbContext.Posts
+            .AsNoTracking()
+            .AnyAsync(post => post.Title == request.Title && post.Id != request.Id, cancellationToken))
         {
             return Result.Conflict("There is already a post with the given title.");
         }
@@ -59,7 +61,7 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         var userId = Guid.Parse(claim.Value);
 
-        var post = await _context.Posts
+        var post = await _dbContext.Posts
             .AsNoTracking()
             .FirstOrDefaultAsync(post => post.Id == request.Id && post.AuthorId == userId, cancellationToken);
 
@@ -70,8 +72,8 @@ public class UpdatePostRequestHandler : IRequestHandler<UpdatePostRequest, Resul
 
         post.Update(request.Title, request.Content, request.Tags);
 
-        _context.Update(post);
-        await _context.SaveChangesAsync(cancellationToken);
+        _dbContext.Update(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(_mapper.Map<PostResponse>(post));
     }

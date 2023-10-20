@@ -19,16 +19,16 @@ namespace Blog.PublicAPI.Features.Authentication;
 
 public class AuthenticationRequestHandler : IRequestHandler<AuthenticationRequest, Result<TokenResponse>>
 {
-    private readonly BlogContext _context;
+    private readonly BlogDbContext _dbContext;
     private readonly JwtOptions _jwtOptions;
     private readonly IValidator<AuthenticationRequest> _validator;
 
     public AuthenticationRequestHandler(
-        BlogContext context,
+        BlogDbContext dbContext,
         JwtOptions jwtOptions,
         IValidator<AuthenticationRequest> validator)
     {
-        _context = context;
+        _dbContext = dbContext;
         _jwtOptions = jwtOptions;
         _validator = validator;
     }
@@ -43,7 +43,7 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
 
         var email = request.Email.ToLowerInvariant();
 
-        var user = await _context.Users
+        var user = await _dbContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(user => user.Email == email && user.State == UserState.Active, cancellationToken);
 

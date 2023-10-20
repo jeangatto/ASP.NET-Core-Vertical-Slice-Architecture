@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Blog.PublicAPI.Data;
 
-public class BlogContext : DbContext
+public class BlogDbContext : DbContext
 {
-    public BlogContext(DbContextOptions<BlogContext> options) : base(options)
+    public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
     {
     }
 

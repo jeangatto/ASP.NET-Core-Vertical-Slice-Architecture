@@ -16,18 +16,18 @@ namespace Blog.PublicAPI.Features.Posts;
 
 public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result<PostResponse>>
 {
-    private readonly BlogContext _context;
+    private readonly BlogDbContext _dbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
     private readonly IValidator<CreatePostRequest> _validator;
 
     public CreatePostRequestHandler(
-        BlogContext context,
+        BlogDbContext dbContext,
         IHttpContextAccessor httpContextAccessor,
         IMapper mapper,
         IValidator<CreatePostRequest> validator)
     {
-        _context = context;
+        _dbContext = dbContext;
         _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
         _validator = validator;
@@ -51,7 +51,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
             return Result<PostResponse>.Invalid(result.AsErrors());
         }
 
-        if (await _context.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title, cancellationToken))
+        if (await _dbContext.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title, cancellationToken))
         {
             return Result<PostResponse>.Conflict("There is already a post with the given title.");
         }
@@ -62,8 +62,8 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         var post = Post.Create(userId, request.Title, request.Content, request.Tags);
 
-        _context.Add(post);
-        await _context.SaveChangesAsync(cancellationToken);
+        _dbContext.Add(post);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success(_mapper.Map<PostResponse>(post));
     }

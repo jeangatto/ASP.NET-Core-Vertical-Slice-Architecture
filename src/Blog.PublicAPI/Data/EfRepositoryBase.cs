@@ -6,9 +6,9 @@ namespace Blog.PublicAPI.Data;
 
 public abstract class EfRepositoryBase<TEntity> where TEntity : class, IAggregateRoot
 {
-    private readonly BlogContext _dbContext;
+    private readonly BlogDbContext _dbContext;
 
-    protected EfRepositoryBase(BlogContext dbContext)
+    protected EfRepositoryBase(BlogDbContext dbContext)
     {
         _dbContext = dbContext;
         DbSet = dbContext.Set<TEntity>();
