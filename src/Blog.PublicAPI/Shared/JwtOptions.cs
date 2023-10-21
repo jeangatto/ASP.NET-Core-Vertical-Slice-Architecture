@@ -1,4 +1,4 @@
-namespace Blog.PublicAPI.SharedKernel;
+namespace Blog.PublicAPI.Shared;
 
 public class JwtOptions
 {

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Blog.PublicAPI.Data;
-using Blog.PublicAPI.SharedKernel;
+using Blog.PublicAPI.Shared;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.Sqlite;

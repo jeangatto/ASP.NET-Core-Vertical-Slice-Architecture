@@ -9,7 +9,7 @@ using Ardalis.Result.FluentValidation;
 using BCrypt.Net;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Domain.UserAggregate;
-using Blog.PublicAPI.SharedKernel;
+using Blog.PublicAPI.Shared;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
