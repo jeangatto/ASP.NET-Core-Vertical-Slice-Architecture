@@ -21,12 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EA311B9C-C068-4A3C-BA3F-C82003B93F7C}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\delete-workflow-runs.yml = .github\workflows\delete-workflow-runs.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0F1A1A9E-D0BF-40A0-A8DD-23DAB633323E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.PublicAPI.Tests", "test\Blog.PublicAPI.Tests\Blog.PublicAPI.Tests.csproj", "{85026F33-64C7-40DA-94A0-F268C301B8F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.PublicAPI.Tests", "test\Blog.PublicAPI.Tests\Blog.PublicAPI.Tests.csproj", "{85026F33-64C7-40DA-94A0-F268C301B8F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
