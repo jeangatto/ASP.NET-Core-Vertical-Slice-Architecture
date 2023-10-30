@@ -2,9 +2,11 @@ using System;
 using Blog.PublicAPI.Extensions;
 using FluentAssertions;
 using Xunit;
+using Xunit.Categories;
 
-namespace Blog.PublicAPI.Tests.Extensions;
+namespace Blog.PublicAPI.Tests.UnitTests.Extensions;
 
+[UnitTest]
 public class StringExtensionsTests
 {
     [Theory]

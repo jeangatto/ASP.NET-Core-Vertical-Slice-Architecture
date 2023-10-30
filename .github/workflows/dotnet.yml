@@ -38,7 +38,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --nologo
 
       - name: Test
-        run: dotnet test --no-build --no-restore --verbosity minimal
+        run: dotnet test --no-build --nologo --no-restore --verbosity minimal
