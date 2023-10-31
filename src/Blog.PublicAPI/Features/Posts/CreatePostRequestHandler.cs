@@ -35,16 +35,6 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
     public async Task<Result<PostResponse>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
-        if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-        {
-            return Result<PostResponse>.Unauthorized();
-        }
-
-        if (!_httpContextAccessor.HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.NameIdentifier))
-        {
-            return Result<PostResponse>.Forbidden();
-        }
-
         var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {

@@ -30,6 +30,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddResponseCompression();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 
 builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
 {
