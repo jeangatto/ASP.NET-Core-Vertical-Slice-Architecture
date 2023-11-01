@@ -49,7 +49,7 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
 
         if (user == null)
         {
-            return Result<TokenResponse>.NotFound("User not found");
+            return Result<TokenResponse>.NotFound("User not found.");
         }
 
         if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.HashedPassword, HashType.SHA512))

@@ -17,19 +17,22 @@ namespace Blog.PublicAPI.Tests.IntegrationTests.Features.Authentication;
 public class AuthenticationControllerTests
 {
     [Fact]
-    public async Task Should_ReturnsHttpOk_When_PostValidRequest()
+    public async Task Post_ValidRequestBody_ReturnsHttpOk()
     {
         // Arrange
         var createUserRequest = new Faker<CreateUserRequest>()
-            .CustomInstantiator(faker => new CreateUserRequest(faker.Person.UserName, faker.Person.Email, faker.Random.String2(4)))
+            .RuleFor(request => request.Name, faker => faker.Person.UserName)
+            .RuleFor(request => request.Email, faker => faker.Person.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
             .Generate();
 
+        var authRequest = new AuthenticationRequest(createUserRequest.Email, createUserRequest.Password);
+
         await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
         using var httpClient = webApplicationFactory.CreateClient();
 
         await httpClient.PostAsJsonAsync("/api/users", createUserRequest);
-
-        var authRequest = new AuthenticationRequest(createUserRequest.Email, createUserRequest.Password);
 
         // Act
         var act = await httpClient.PostAsJsonAsync("api/auth", authRequest);
@@ -45,12 +48,13 @@ public class AuthenticationControllerTests
     }
 
     [Fact]
-    public async Task Should_ReturnsHttpBadRequest_When_PostInvalidRequest()
+    public async Task Post_InvalidRequestBody_ReturnsHttpBadRequest()
     {
         // Arrange
         var request = new AuthenticationRequest(string.Empty, string.Empty);
 
         await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
@@ -63,5 +67,63 @@ public class AuthenticationControllerTests
         response.Title.Should().Be("One or more validation errors occurred.");
         response.Status.Should().Be(StatusCodes.Status400BadRequest);
         response.Extensions.Keys.Should().Contain("errors");
+    }
+
+    [Fact]
+    public async Task Post_NonExistentUser_ReturnsHttpNotFound()
+    {
+        // Arrange
+        var request = new Faker<AuthenticationRequest>()
+            .RuleFor(request => request.Email, faker => faker.Person.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
+            .Generate();
+
+        await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
+        using var httpClient = webApplicationFactory.CreateClient();
+
+        // Act
+        using var act = await httpClient.PostAsJsonAsync("/api/auth", request);
+
+        // Assert
+        act.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
+        response.Title.Should().Be("Resource not found.");
+        response.Detail.Should().ContainAll("Next error(s) occured:* User not found.");
+        response.Status.Should().Be(StatusCodes.Status404NotFound);
+    }
+
+    [Fact]
+    public async Task Post_IncorrectPassword_ReturnsHttpUnprocessableEntity()
+    {
+        // Arrange
+        var createUserRequest = new Faker<CreateUserRequest>()
+            .RuleFor(request => request.Name, faker => faker.Person.UserName)
+            .RuleFor(request => request.Email, faker => faker.Person.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
+            .Generate();
+
+        var authRequest = new Faker<AuthenticationRequest>()
+            .RuleFor(request => request.Email, createUserRequest.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
+            .Generate();
+
+        await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
+        using var httpClient = webApplicationFactory.CreateClient();
+
+        await httpClient.PostAsJsonAsync("/api/users", createUserRequest);
+
+        // Act
+        using var act = await httpClient.PostAsJsonAsync("/api/auth", authRequest);
+
+        // Assert
+        act.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
+
+        var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
+        response.Title.Should().Be("Something went wrong.");
+        response.Detail.Should().ContainAll("Next error(s) occured:* Email or password is incorrect.");
+        response.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
     }
 }

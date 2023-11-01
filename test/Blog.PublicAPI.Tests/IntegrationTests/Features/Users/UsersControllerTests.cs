@@ -20,14 +20,17 @@ namespace Blog.PublicAPI.Tests.IntegrationTests.Features.Users;
 public class UsersControllerTests
 {
     [Fact]
-    public async Task Should_ReturnsHttpOk_When_PostValidRequest()
+    public async Task Post_ValidRequestBody_ReturnsHttpOk()
     {
         // Arrange
         var request = new Faker<CreateUserRequest>()
-            .CustomInstantiator(faker => new CreateUserRequest(faker.Person.UserName, faker.Person.Email, faker.Random.String2(4)))
+            .RuleFor(request => request.Name, faker => faker.Person.UserName)
+            .RuleFor(request => request.Email, faker => faker.Person.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
             .Generate();
 
         await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
@@ -46,12 +49,13 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task Should_ReturnsHttpBadRequest_When_PostInvalidRequest()
+    public async Task Post_InvalidRequestBody_ReturnsHttpBadRequest()
     {
         // Arrange
         var request = new CreateUserRequest(string.Empty, string.Empty, string.Empty);
 
         await using var webApplicationFactory = new WebApplicationFactory<Program>();
+
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
@@ -67,7 +71,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task Should_ReturnsHttpConflict_When_PostValidRequest()
+    public async Task Post_AlreadyExistingUser_ReturnsHttpConflict()
     {
         // Arrange
         var user = new Faker<User>()
@@ -75,7 +79,9 @@ public class UsersControllerTests
             .Generate();
 
         var request = new Faker<CreateUserRequest>()
-            .CustomInstantiator(faker => new CreateUserRequest(user.Name, user.Email, faker.Random.String2(4)))
+            .RuleFor(request => request.Name, user.Name)
+            .RuleFor(request => request.Email, user.Email)
+            .RuleFor(request => request.Password, faker => faker.Random.String2(4))
             .Generate();
 
         await using var webApplicationFactory = new WebApplicationFactory<Program>();
@@ -93,7 +99,7 @@ public class UsersControllerTests
 
         var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
         response.Title.Should().Be("There was a conflict.");
-        response.Detail.Should().Be("Next error(s) occured:* The email address provided is already in use.\r\n");
+        response.Detail.Should().ContainAll("Next error(s) occured:* The email address provided is already in use.");
         response.Status.Should().Be(StatusCodes.Status409Conflict);
     }
 }
