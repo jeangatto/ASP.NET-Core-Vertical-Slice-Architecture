@@ -14,7 +14,8 @@ public class AuthenticationController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AuthenticationController(IMediator mediator) => _mediator = mediator;
+    public AuthenticationController(IMediator mediator) =>
+        _mediator = mediator;
 
     [HttpPost]
     [AllowAnonymous]

@@ -4,13 +4,13 @@ namespace Blog.PublicAPI.Domain.UserAggregate;
 
 public class User : IEntity<Guid>, IAggregateRoot
 {
-    public User(string name, string email, string hashedPassword, UserState state)
+    public User(string name, string email, string hashedPassword)
     {
         Id = Guid.NewGuid();
         Name = name;
-        Email = email;
+        Email = email.ToLowerInvariant();
         HashedPassword = hashedPassword;
-        State = state;
+        State = UserState.Active;
         CreatedAt = DateTime.UtcNow;
     }
 

@@ -35,10 +35,10 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
     public async Task<Result<PostResponse>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(request, cancellationToken);
-        if (!result.IsValid)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            return Result<PostResponse>.Invalid(result.AsErrors());
+            return Result<PostResponse>.Invalid(validationResult.AsErrors());
         }
 
         if (await _dbContext.Posts.AsNoTracking().AnyAsync(post => post.Title == request.Title, cancellationToken))

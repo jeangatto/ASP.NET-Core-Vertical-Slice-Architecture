@@ -35,10 +35,10 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
 
     public async Task<Result<TokenResponse>> Handle(AuthenticationRequest request, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(request, cancellationToken);
-        if (!result.IsValid)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            return Result<TokenResponse>.Invalid(result.AsErrors());
+            return Result<TokenResponse>.Invalid(validationResult.AsErrors());
         }
 
         var email = request.Email.ToLowerInvariant();

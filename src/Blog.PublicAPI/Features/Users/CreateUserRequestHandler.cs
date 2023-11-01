@@ -31,10 +31,10 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
     public async Task<Result<UserResponse>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(request, cancellationToken);
-        if (!result.IsValid)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            return Result<UserResponse>.Invalid(result.AsErrors());
+            return Result<UserResponse>.Invalid(validationResult.AsErrors());
         }
 
         var email = request.Email.ToLowerInvariant();
@@ -46,7 +46,7 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);
 
-        var user = new User(request.Name, email, hashedPassword, UserState.Active);
+        var user = new User(request.Name, email, hashedPassword);
 
         _context.Add(user);
 

@@ -16,7 +16,8 @@ public class PostsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PostsController(IMediator mediator) => _mediator = mediator;
+    public PostsController(IMediator mediator) =>
+        _mediator = mediator;
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
