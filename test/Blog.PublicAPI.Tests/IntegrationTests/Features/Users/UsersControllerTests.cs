@@ -19,10 +19,8 @@ namespace Blog.PublicAPI.Tests.IntegrationTests.Features.Users;
 [IntegrationTest]
 public class UsersControllerTests
 {
-    private const string Endpoint = "/api/users";
-
     [Fact]
-    public async Task Should_ReturnsHttp200Ok_When_Post_Valid_Request()
+    public async Task Should_ReturnsHttpOk_When_PostValidRequest()
     {
         // Arrange
         var request = new Faker<CreateUserRequest>()
@@ -33,7 +31,7 @@ public class UsersControllerTests
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
-        using var act = await httpClient.PostAsJsonAsync(Endpoint, request);
+        using var act = await httpClient.PostAsJsonAsync("/api/users", request);
 
         // Assert
         act.EnsureSuccessStatusCode();
@@ -48,7 +46,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task Should_ReturnsHttp400BadRequest_When_Post_Invalid_Request()
+    public async Task Should_ReturnsHttpBadRequest_When_PostInvalidRequest()
     {
         // Arrange
         var request = new CreateUserRequest(string.Empty, string.Empty, string.Empty);
@@ -57,7 +55,7 @@ public class UsersControllerTests
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
-        using var act = await httpClient.PostAsJsonAsync(Endpoint, request);
+        using var act = await httpClient.PostAsJsonAsync("/api/users", request);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -69,7 +67,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task Should_ReturnsHttp409Conflict_When_Post_Valid_Request()
+    public async Task Should_ReturnsHttpConflict_When_PostValidRequest()
     {
         // Arrange
         var user = new Faker<User>()
@@ -88,7 +86,7 @@ public class UsersControllerTests
         using var httpClient = webApplicationFactory.CreateClient();
 
         // Act
-        using var act = await httpClient.PostAsJsonAsync(Endpoint, request);
+        using var act = await httpClient.PostAsJsonAsync("/api/users", request);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.Conflict);
