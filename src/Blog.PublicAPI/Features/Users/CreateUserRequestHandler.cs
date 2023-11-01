@@ -19,7 +19,10 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
     private readonly IMapper _mapper;
     private readonly IValidator<CreateUserRequest> _validator;
 
-    public CreateUserRequestHandler(BlogDbContext context, IMapper mapper, IValidator<CreateUserRequest> validator)
+    public CreateUserRequestHandler(
+        BlogDbContext context,
+        IMapper mapper,
+        IValidator<CreateUserRequest> validator)
     {
         _context = context;
         _mapper = mapper;
@@ -43,11 +46,11 @@ public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Resul
 
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512);
 
-        var user = User.Create(request.Name, email, hashedPassword);
+        var user = new User(request.Name, email, hashedPassword, UserState.Active);
 
         _context.Add(user);
 
-        var author = Author.Create(user.Id, request.Name);
+        var author = new Author(user.Id, request.Name);
 
         _context.Add(author);
 

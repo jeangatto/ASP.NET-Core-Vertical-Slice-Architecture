@@ -50,7 +50,7 @@ public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Resul
 
         var userId = Guid.Parse(claim.Value);
 
-        var post = Post.Create(userId, request.Title, request.Content, request.Tags);
+        var post = new Post(userId, request.Title, request.Content, request.Tags);
 
         _dbContext.Add(post);
         await _dbContext.SaveChangesAsync(cancellationToken);

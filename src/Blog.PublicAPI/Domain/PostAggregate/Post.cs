@@ -9,11 +9,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
 {
     private readonly List<Tag> _tags = new();
 
-    public Post()
-    {
-    }
-
-    private Post(Guid authorId, string title, string content, string[] tags)
+    public Post(Guid authorId, string title, string content, string[] tags)
     {
         Id = Guid.NewGuid();
         AuthorId = authorId;
@@ -25,39 +21,20 @@ public class Post : IEntity<Guid>, IAggregateRoot
         AddTags(tags);
     }
 
+    public Post()
+    {
+    }
+
     public Guid Id { get; }
     public Guid AuthorId { get; private init; }
-    public string Title { get; private set; }
+    public string Title { get; private init; }
     public string TitleUrlFriendly { get; private init; }
-    public string Content { get; private set; }
+    public string Content { get; private init; }
     public DateTime CreatedAt { get; private init; }
-    public DateTime? UpdatedAt { get; private set; }
+    public DateTime? UpdatedAt { get; private init; }
 
     public Author Author { get; private init; }
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
-
-    public static Post Create(Guid authorId, string title, string content, string[] tags)
-    {
-        ArgumentNullException.ThrowIfNull(authorId, nameof(authorId));
-        ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
-        ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
-        ArgumentNullException.ThrowIfNull(tags, nameof(tags));
-
-        return new Post(authorId, title, content, tags);
-    }
-
-    public void Update(string title, string content, string[] tags)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(title, nameof(title));
-        ArgumentException.ThrowIfNullOrEmpty(content, nameof(title));
-        ArgumentNullException.ThrowIfNull(tags, nameof(tags));
-
-        Title = title;
-        Content = content;
-        UpdatedAt = DateTime.UtcNow;
-
-        AddTags(tags);
-    }
 
     private void AddTags(string[] tags)
     {
@@ -66,7 +43,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
         var newTags = tags
             .Distinct()
             .OrderBy(tag => tag)
-            .Select(tag => Tag.Create(Id, tag))
+            .Select(tag => new Tag(Id, tag))
             .ToList();
 
         _tags.AddRange(newTags);

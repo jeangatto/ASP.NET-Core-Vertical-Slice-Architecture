@@ -9,7 +9,7 @@ public class PostMapperProfile : Profile
     public PostMapperProfile()
     {
         CreateMap<Post, PostResponse>(MemberList.Destination)
-            .ForMember(dest => dest.Tags, cfg => cfg.MapFrom(src => src.Tags.Select(tag => $"#{tag.Title}").ToList()));
+            .ForMember(dest => dest.Tags, cfg => cfg.MapFrom(src => src.Tags.Select(tag => $"#{tag.Title.Replace(" ", "_").ToLowerInvariant().Trim()}").ToList()));
     }
 
     public override string ProfileName => nameof(PostMapperProfile);

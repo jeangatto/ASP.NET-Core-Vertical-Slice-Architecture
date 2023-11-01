@@ -29,18 +29,6 @@ public class PostsController : ControllerBase
     public async Task<ActionResult<PostResponse>> Create([FromBody] CreatePostRequest request) =>
         (await _mediator.Send(request)).ToActionResult(this);
 
-    [HttpPut]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Consumes(MediaTypeNames.Application.Json)]
-    [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PostResponse>> Update([FromBody] UpdatePostRequest request) =>
-        (await _mediator.Send(request)).ToActionResult(this);
-
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     [Consumes(MediaTypeNames.Application.Json)]
