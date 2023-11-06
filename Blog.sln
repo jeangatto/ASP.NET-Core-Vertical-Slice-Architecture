@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		nuget.config = nuget.config
 		README.md = README.md
+		img\vertical-slice-01.png = img\vertical-slice-01.png
+		img\vertical-slice-02.png = img\vertical-slice-02.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EA311B9C-C068-4A3C-BA3F-C82003B93F7C}"
