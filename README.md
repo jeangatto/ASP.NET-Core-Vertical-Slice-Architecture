@@ -7,7 +7,7 @@
 
 About the repoitory:
 
-Open source project written in the latest version of ASP.NET Core, implementing vertical slice architecture, S.O.L.I.D. concepts and Clean Code.
+Open source project written in the latest version of ASP.NET Core, implementing **Vertical Slice Architecture**, S.O.L.I.D. concepts and Clean Code.
 
 ## Give it a star! ⭐
 
