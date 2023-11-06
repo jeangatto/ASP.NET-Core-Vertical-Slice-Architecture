@@ -6,8 +6,14 @@
 [![License](https://img.shields.io/github/license/jeangatto/ASP.NET-Core-Clean-Architecture-CQRS-Event-Sourcing.svg)](LICENSE)
 
 About the repoitory:
-Open source project written in the latest version of ASP.NET Core, implementing the concepts of S.O.L.I.D, Clean Code,
-CQRS (Command Query Responsibility Segregation)
+
+The vertical slice architecture is a technique that helps us build maintainable applications by separating the application around features or “vertical slices”. 
+
+Advantages of Vertical Slice Architecture:
+- Reduction in Coupling
+- External Interaction
+- Command and Query Responsibility Segregation
+- Feature Grouping
 
 ## Give it a star! ⭐
 
@@ -15,7 +21,18 @@ If you liked this project, learned something, give it a star. Thank you!
 
 ## **Architecture**
 
-![Vertical Slice Architecture](img/vertical-slice "Vertical Slice Architecture")
+![Vertical Slice Architecture](img/vertical-slice.png "Vertical Slice Architecture")
+
+
+## **Technologies**
+
+- ASP.NET Core 7.0
+- Entity Framework Core 7.0
+- Unit & Integration Tests + xUnit + FluentAssertions
+- AutoMapper
+- FluentValidator
+- MediatR
+- SQL Server
 
 ## License
 
