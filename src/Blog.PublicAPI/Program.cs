@@ -29,8 +29,8 @@ builder.Services.Configure<JsonOptions>(jsonOptions =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddResponseCompression();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
+builder.Services.AddControllers();
 
 builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
 {
