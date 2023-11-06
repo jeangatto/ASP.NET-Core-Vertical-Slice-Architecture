@@ -34,7 +34,6 @@ If you liked this project, learned something, give it a star. Thank you!
 References:
 - https://www.youtube.com/watch?v=L2Wnq0ChAIA
 - https://www.youtube.com/watch?v=lsddiYwWaOQ
-- https://code-maze.com/vertical-slice-architecture-aspnet-core/
 
 ## **Technologies**
 
