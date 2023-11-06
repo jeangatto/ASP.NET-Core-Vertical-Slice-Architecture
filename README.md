@@ -7,20 +7,7 @@
 
 About the repoitory:
 
-The vertical slice architecture is a technique that helps us build maintainable applications by separating the application around features or “vertical slices”. 
-
-Advantages of Vertical Slice Architecture:
-- Reduction in Coupling
-- External Interaction
-- Command and Query Responsibility Segregation
-- Feature Grouping
-
-References:
-- https://www.youtube.com/watch?v=L2Wnq0ChAIA
-- https://www.youtube.com/watch?v=lsddiYwWaOQ
-- https://code-maze.com/vertical-slice-architecture-aspnet-core/
-- https://www.srinadimpalli.com/2021/05/vertical-slice-architecture-using-net5-cqrs-mediatr-ef-core-c/
-- https://garywoodfine.com/implementing-vertical-slice-architecture/
+Open source project written in the latest version of ASP.NET Core, implementing vertical slice architecture, S.O.L.I.D. concepts and Clean Code.
 
 ## Give it a star! ⭐
 
@@ -30,6 +17,24 @@ If you liked this project, learned something, give it a star. Thank you!
 
 ![Vertical Slice Architecture](img/vertical-slice.png "Vertical Slice Architecture")
 
+> **What Is Vertical Slice Architecture**
+> 
+> The vertical slice architecture is a technique that helps us build maintainable applications by separating the application around features or “vertical slices”. 
+> 
+> In this approach, we think of the application code in terms of features rather than the layer it sits in. We treat each feature as a vertical slice. Because every feature within the application is a separate component, it can change independently. 
+> 
+> Advantages of Vertical Slice Architecture:
+> - Reduction in Coupling
+> - External Interaction
+> - Command and Query Responsibility Segregation
+> - Feature Grouping
+>
+> -- <cite>https://code-maze.com/vertical-slice-architecture-aspnet-core/</cite>
+
+References:
+- https://www.youtube.com/watch?v=L2Wnq0ChAIA
+- https://www.youtube.com/watch?v=lsddiYwWaOQ
+- https://code-maze.com/vertical-slice-architecture-aspnet-core/
 
 ## **Technologies**
 
