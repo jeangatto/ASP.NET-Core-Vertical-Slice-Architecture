@@ -17,21 +17,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Blog.PublicAPI.Features.Authentication;
 
-public class AuthenticationRequestHandler : IRequestHandler<AuthenticationRequest, Result<TokenResponse>>
+public class AuthenticationRequestHandler(
+    BlogDbContext dbContext,
+    JwtOptions jwtOptions,
+    IValidator<AuthenticationRequest> validator) : IRequestHandler<AuthenticationRequest, Result<TokenResponse>>
 {
-    private readonly BlogDbContext _dbContext;
-    private readonly JwtOptions _jwtOptions;
-    private readonly IValidator<AuthenticationRequest> _validator;
-
-    public AuthenticationRequestHandler(
-        BlogDbContext dbContext,
-        JwtOptions jwtOptions,
-        IValidator<AuthenticationRequest> validator)
-    {
-        _dbContext = dbContext;
-        _jwtOptions = jwtOptions;
-        _validator = validator;
-    }
+    private readonly BlogDbContext _dbContext = dbContext;
+    private readonly JwtOptions _jwtOptions = jwtOptions;
+    private readonly IValidator<AuthenticationRequest> _validator = validator;
 
     public async Task<Result<TokenResponse>> Handle(AuthenticationRequest request, CancellationToken cancellationToken)
     {
@@ -68,13 +61,13 @@ public class AuthenticationRequestHandler : IRequestHandler<AuthenticationReques
     {
         var identifier = user.Id.ToString();
 
-        return new[]
-        {
+        return
+        [
             new Claim(ClaimTypes.NameIdentifier, identifier),
             new Claim(JwtRegisteredClaimNames.UniqueName, identifier),
             new Claim(JwtRegisteredClaimNames.Sub, user.Name, ClaimValueTypes.String),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+        ];
     }
 
     private string CreateAccessToken(Claim[] claims)

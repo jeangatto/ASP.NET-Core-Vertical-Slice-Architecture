@@ -14,24 +14,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class CreatePostRequestHandler : IRequestHandler<CreatePostRequest, Result<PostResponse>>
+public class CreatePostRequestHandler(
+    BlogDbContext dbContext,
+    IHttpContextAccessor httpContextAccessor,
+    IMapper mapper,
+    IValidator<CreatePostRequest> validator) : IRequestHandler<CreatePostRequest, Result<PostResponse>>
 {
-    private readonly BlogDbContext _dbContext;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMapper _mapper;
-    private readonly IValidator<CreatePostRequest> _validator;
-
-    public CreatePostRequestHandler(
-        BlogDbContext dbContext,
-        IHttpContextAccessor httpContextAccessor,
-        IMapper mapper,
-        IValidator<CreatePostRequest> validator)
-    {
-        _dbContext = dbContext;
-        _httpContextAccessor = httpContextAccessor;
-        _mapper = mapper;
-        _validator = validator;
-    }
+    private readonly BlogDbContext _dbContext = dbContext;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IMapper _mapper = mapper;
+    private readonly IValidator<CreatePostRequest> _validator = validator;
 
     public async Task<Result<PostResponse>> Handle(CreatePostRequest request, CancellationToken cancellationToken)
     {

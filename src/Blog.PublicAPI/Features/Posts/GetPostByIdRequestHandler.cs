@@ -8,16 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Posts;
 
-public class GetPostByIdRequestHandler : IRequestHandler<GetPostByIdRequest, Result<PostResponse>>
+public class GetPostByIdRequestHandler(BlogDbContext dbContext, IMapper mapper) : IRequestHandler<GetPostByIdRequest, Result<PostResponse>>
 {
-    private readonly BlogDbContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public GetPostByIdRequestHandler(BlogDbContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
+    private readonly BlogDbContext _dbContext = dbContext;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<PostResponse>> Handle(GetPostByIdRequest request, CancellationToken cancellationToken)
     {

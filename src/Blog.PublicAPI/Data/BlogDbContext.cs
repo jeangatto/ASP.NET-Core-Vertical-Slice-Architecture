@@ -7,13 +7,8 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Blog.PublicAPI.Data;
 
-public class BlogDbContext : DbContext
+public class BlogDbContext(DbContextOptions<BlogDbContext> options) : DbContext(options)
 {
-    public BlogDbContext(DbContextOptions<BlogDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<User> Users => Set<User>();
 

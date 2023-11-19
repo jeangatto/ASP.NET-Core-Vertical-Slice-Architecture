@@ -10,12 +10,9 @@ namespace Blog.PublicAPI.Features.Authentication;
 
 [Route("api/auth")]
 [ApiController]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public AuthenticationController(IMediator mediator) =>
-        _mediator = mediator;
+    private readonly IMediator _mediator = mediator;
 
     [HttpPost]
     [AllowAnonymous]

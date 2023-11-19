@@ -55,7 +55,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseResponseCompression();
 app.UseHttpsRedirection();
-app.UseHttpLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -10,12 +10,9 @@ namespace Blog.PublicAPI.Features.Users;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public UsersController(IMediator mediator) =>
-        _mediator = mediator;
+    private readonly IMediator _mediator = mediator;
 
     [HttpPost]
     [AllowAnonymous]

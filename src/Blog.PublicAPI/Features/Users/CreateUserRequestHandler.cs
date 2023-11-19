@@ -13,21 +13,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.PublicAPI.Features.Users;
 
-public class CreateUserRequestHandler : IRequestHandler<CreateUserRequest, Result<UserResponse>>
+public class CreateUserRequestHandler(
+    BlogDbContext context,
+    IMapper mapper,
+    IValidator<CreateUserRequest> validator) : IRequestHandler<CreateUserRequest, Result<UserResponse>>
 {
-    private readonly BlogDbContext _context;
-    private readonly IMapper _mapper;
-    private readonly IValidator<CreateUserRequest> _validator;
-
-    public CreateUserRequestHandler(
-        BlogDbContext context,
-        IMapper mapper,
-        IValidator<CreateUserRequest> validator)
-    {
-        _context = context;
-        _mapper = mapper;
-        _validator = validator;
-    }
+    private readonly BlogDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
+    private readonly IValidator<CreateUserRequest> _validator = validator;
 
     public async Task<Result<UserResponse>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
     {

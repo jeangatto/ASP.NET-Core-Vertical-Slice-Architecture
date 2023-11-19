@@ -7,7 +7,7 @@ namespace Blog.PublicAPI.Domain.PostAggregate;
 
 public class Post : IEntity<Guid>, IAggregateRoot
 {
-    private readonly List<Tag> _tags = new();
+    private readonly List<Tag> _tags = [];
 
     public Post(Guid authorId, string title, string content, string[] tags)
     {
