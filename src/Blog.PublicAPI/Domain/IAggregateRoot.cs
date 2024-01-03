@@ -1,5 +1,3 @@
 namespace Blog.PublicAPI.Domain;
 
-public interface IAggregateRoot
-{
-}
+public interface IAggregateRoot;
