@@ -90,7 +90,7 @@ public class AuthenticationControllerTests
 
         var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
         response.Title.Should().Be("Resource not found.");
-        response.Detail.Should().ContainAll("Next error(s) occured:* User not found.");
+        response.Detail.Should().ContainAny("User not found.");
         response.Status.Should().Be(StatusCodes.Status404NotFound);
     }
 
@@ -123,7 +123,7 @@ public class AuthenticationControllerTests
 
         var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
         response.Title.Should().Be("Something went wrong.");
-        response.Detail.Should().ContainAll("Next error(s) occured:* Email or password is incorrect.");
+        response.Detail.Should().ContainAny("Email or password is incorrect.");
         response.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
     }
 }

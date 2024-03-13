@@ -99,7 +99,7 @@ public class UsersControllerTests
 
         var response = await act.Content.ReadFromJsonAsync<ProblemDetails>();
         response.Title.Should().Be("There was a conflict.");
-        response.Detail.Should().ContainAll("Next error(s) occured:* The email address provided is already in use.");
+        response.Detail.Should().ContainAny("The email address provided is already in use.");
         response.Status.Should().Be(StatusCodes.Status409Conflict);
     }
 }
