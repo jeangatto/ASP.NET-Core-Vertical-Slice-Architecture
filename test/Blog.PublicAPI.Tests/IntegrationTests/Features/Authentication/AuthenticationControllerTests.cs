@@ -35,7 +35,7 @@ public class AuthenticationControllerTests
         await httpClient.PostAsJsonAsync("/api/users", createUserRequest);
 
         // Act
-        var act = await httpClient.PostAsJsonAsync("api/auth", authRequest);
+        using var act = await httpClient.PostAsJsonAsync("api/auth", authRequest);
 
         // Assert
         act.EnsureSuccessStatusCode();
