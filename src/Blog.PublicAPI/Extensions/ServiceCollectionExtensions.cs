@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +19,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Blog.PublicAPI.Extensions;
 
+[ExcludeFromCodeCoverage]
 public static class ServiceCollectionExtensions
 {
     private const string ConnectionString = "DataSource=:memory:";
