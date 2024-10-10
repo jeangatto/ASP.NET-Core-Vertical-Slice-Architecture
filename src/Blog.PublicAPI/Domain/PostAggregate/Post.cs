@@ -42,7 +42,7 @@ public class Post : IEntity<Guid>, IAggregateRoot
 
         var newTags = tags
             .Distinct()
-            .OrderBy(tag => tag)
+            .Order()
             .Select(tag => new Tag(Id, tag))
             .ToList();
 
