@@ -1,9 +1,6 @@
 using System;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Blog.PublicAPI.Data;
@@ -15,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 namespace Blog.PublicAPI.Extensions;
 
@@ -53,51 +49,6 @@ public static class ServiceCollectionExtensions
             });
 
         services.AddAuthorization();
-    }
-
-    public static void ConfigureSwagger(this IServiceCollection services)
-    {
-        services.AddSwaggerGen(swaggerOptions =>
-        {
-            swaggerOptions.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Version = "v1",
-                Title = "Blog",
-                Description = "ASP.NET Core C# Vertical Slice Architecture, CQRS, REST API, DDD, SOLID Principles"
-            });
-
-            swaggerOptions.AddSecurityDefinition(SecurityScheme, new OpenApiSecurityScheme
-            {
-                Description = "Standard authorisation using the Bearer scheme. Example: \"Bearer {token}\"",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = SecurityScheme,
-                BearerFormat = "JWT"
-            });
-
-            swaggerOptions.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = SecurityScheme
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
-
-            swaggerOptions.ResolveConflictingActions(apiDescription => apiDescription.FirstOrDefault());
-
-            // Set the comments path for the Swagger JSON and UI.
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            swaggerOptions.IncludeXmlComments(xmlPath, true);
-        });
     }
 
     public static void AddBlogDbContext(this IServiceCollection services)

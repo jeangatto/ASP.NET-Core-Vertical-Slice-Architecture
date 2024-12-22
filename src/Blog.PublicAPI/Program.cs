@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using AutoMapper;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Extensions;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +30,19 @@ builder.Services.Configure<JsonOptions>(jsonOptions =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddResponseCompression();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApiVersioning(versioningOptions =>
+{
+    versioningOptions.DefaultApiVersion = ApiVersion.Default;
+    versioningOptions.ReportApiVersions = true;
+    versioningOptions.AssumeDefaultVersionWhenUnspecified = true;
+})
+.AddApiExplorer(explorerOptions =>
+{
+    explorerOptions.GroupNameFormat = "'v'VVV";
+    explorerOptions.SubstituteApiVersionInUrl = true;
+});
+
+builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddControllers();
 
@@ -40,7 +54,6 @@ builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
 
 // Application Services
 builder.Services.ConfigureJwtBearer(builder.Configuration);
-builder.Services.ConfigureSwagger();
 builder.Services.AddBlogDbContext();
 builder.Services.AddFeatures();
 
@@ -48,11 +61,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.MapScalarApiReference();
 
+app.MapOpenApi();
 app.UseResponseCompression();
 app.UseHttpsRedirection();
 app.UseAuthentication();
