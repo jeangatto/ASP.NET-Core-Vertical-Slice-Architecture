@@ -19,7 +19,6 @@ namespace Blog.PublicAPI.Extensions;
 public static class ServiceCollectionExtensions
 {
     private const string ConnectionString = "DataSource=:memory:";
-    private const string SecurityScheme = "Bearer";
 
     public static void ConfigureJwtBearer(this IServiceCollection services, IConfiguration configuration)
     {
