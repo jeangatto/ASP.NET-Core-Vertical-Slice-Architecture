@@ -1,9 +1,11 @@
 using System;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Blog.PublicAPI.Data;
+using Blog.PublicAPI.Features.Abstractions;
 using Blog.PublicAPI.Shared;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +21,7 @@ namespace Blog.PublicAPI.Extensions;
 public static class ServiceCollectionExtensions
 {
     private const string ConnectionString = "DataSource=:memory:";
+    private static readonly Assembly AssemblyToScan = typeof(IFeatureMarker).Assembly;
 
     public static void ConfigureJwtBearer(this IServiceCollection services, IConfiguration configuration)
     {
@@ -65,9 +68,8 @@ public static class ServiceCollectionExtensions
 
     public static void AddFeatures(this IServiceCollection services)
     {
-        var assemblyToScan = typeof(Program).Assembly;
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assemblyToScan));
-        services.AddValidatorsFromAssembly(assemblyToScan);
-        services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(assemblyToScan))));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(AssemblyToScan));
+        services.AddValidatorsFromAssembly(AssemblyToScan);
+        services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(AssemblyToScan))));
     }
 }
