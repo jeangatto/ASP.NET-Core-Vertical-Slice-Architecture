@@ -12,11 +12,11 @@
     <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.1.*" />
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.*" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.*" />
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="AutoMapper" Version="13.0.*" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.*  " />
     <PackageReference Include="FluentValidation" Version="11.11.*" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.*" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="MediatR" Version="12.4.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.*" />
