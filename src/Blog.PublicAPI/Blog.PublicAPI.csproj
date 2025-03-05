@@ -7,40 +7,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ardalis.Result" Version="10.1.*" />
-    <PackageReference Include="Ardalis.Result.AspNetCore" Version="10.1.*" />
-    <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.1.*" />
-    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.*" />
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.*" />
-    <PackageReference Include="AutoMapper" Version="13.0.*" />
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.*  " />
-    <PackageReference Include="FluentValidation" Version="11.11.*" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.*" />
-    <PackageReference Include="MediatR" Version="12.4.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.*" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.12.*">
+    <PackageReference Include="Ardalis.Result" Version="10.*" />
+    <PackageReference Include="Ardalis.Result.AspNetCore" Version="10.*" />
+    <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.*" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.*" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.*" />
+    <PackageReference Include="AutoMapper" Version="14.*" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.*" />
+    <PackageReference Include="FluentValidation" Version="11.*" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.*" />
+    <PackageReference Include="MediatR" Version="12.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.*" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.*" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.*">
+    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.CodeFixes" Version="4.12.*">
+    <PackageReference Include="Roslynator.CodeFixes" Version="4.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.12.*">
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.*" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.*" />
-    <PackageReference Include="System.Text.Json" Version="9.0.*" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.*" />
+    <PackageReference Include="System.Text.Json" Version="9.*" />
   </ItemGroup>
 
   <ItemGroup>
