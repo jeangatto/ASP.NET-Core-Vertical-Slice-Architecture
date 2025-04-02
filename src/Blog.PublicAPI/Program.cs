@@ -5,7 +5,6 @@ using AutoMapper;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
