@@ -1,7 +1,7 @@
 namespace Blog.PublicAPI.Domain.UserAggregate;
 
-public enum UserState
+public enum UserState : byte
 {
-    Active = 1,
-    Inactive = 2
+    Active,
+    Inactive
 }
