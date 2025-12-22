@@ -39,8 +39,8 @@ References:
 
 ## **Technologies**
 
-- ASP.NET Core 9
-- Entity Framework Core 9
+- ASP.NET Core 10
+- Entity Framework Core 10
 - Unit & Integration Tests + xUnit + FluentAssertions
 - AutoMapper
 - FluentValidator

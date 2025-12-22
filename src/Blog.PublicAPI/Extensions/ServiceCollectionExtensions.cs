@@ -3,7 +3,6 @@ using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
-using AutoMapper;
 using Blog.PublicAPI.Data;
 using Blog.PublicAPI.Features.Abstractions;
 using Blog.PublicAPI.Shared;
@@ -68,8 +67,9 @@ public static class ServiceCollectionExtensions
 
     public static void AddFeatures(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(AssemblyToScan));
-        services.AddValidatorsFromAssembly(AssemblyToScan);
-        services.AddSingleton<IMapper>(new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(AssemblyToScan))));
+        services
+            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(AssemblyToScan))
+            .AddValidatorsFromAssembly(AssemblyToScan)
+            .AddAutoMapper(cfg => cfg.AddMaps(AssemblyToScan));
     }
 }
