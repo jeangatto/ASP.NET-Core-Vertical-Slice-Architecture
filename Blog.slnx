@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="img/vertical-slice.png" />
+    <File Path="LICENSE" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/workflows/">
+    <File Path=".github/workflows/codeql-analysis.yml" />
+    <File Path=".github/workflows/delete-workflow-runs.yml" />
+    <File Path=".github/workflows/devskim-analysis.yml" />
+    <File Path=".github/workflows/dotnet.yml" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Blog.PublicAPI/Blog.PublicAPI.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Blog.PublicAPI.Tests/Blog.PublicAPI.Tests.csproj" />
+  </Folder>
+</Solution>
