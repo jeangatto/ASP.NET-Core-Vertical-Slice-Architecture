@@ -45,14 +45,18 @@ Vertical Slice Architecture organizes the application around business features r
 
 1. Clone the repository.
 2. Restore dependencies:
+
    ```bash
    dotnet restore
    ```
-3. Run the API:
+   
+4. Run the API:
+
    ```bash
    dotnet run --project src/Blog.PublicAPI
    ```
-4. Open the API documentation in your browser:
+   
+6. Open the API documentation in your browser:
    - Scalar: http://localhost:5147/scalar/v1
    - HTTPS: https://localhost:7112/scalar/v1
 
