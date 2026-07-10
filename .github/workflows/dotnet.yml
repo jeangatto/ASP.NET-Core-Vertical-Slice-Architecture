@@ -1,3 +1,4 @@
+# https://github.com/actions/setup-dotnet
 name: Build
 
 on:
@@ -6,14 +7,11 @@ on:
     types: [opened, synchronize, reopened]
     branches: [main]
     paths-ignore:
-      - "README.md"
-      - ".github/workflows/**.yml"
-      - "docs/**"
+      - ".github/workflows/**"
       - "**/*.md"
       - "**/*.yml"
 
 env:
-  DOTNET_VERSION: "10.0.x"
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -27,18 +25,18 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: "10.0.x"
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Blog.slnx
 
       - name: Build
-        run: dotnet build --no-restore --nologo
+        run: dotnet build Blog.slnx --nologo --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test --no-build --nologo --no-restore --verbosity minimal
+        run: dotnet test Blog.slnx --nologo --no-build --no-restore --configuration Release --verbosity minimal
