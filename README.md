@@ -1,52 +1,89 @@
-# ASP.NET Core C# Vertical Slice Architecture, CQRS, REST API, DDD, SOLID Principles
+# ASP.NET Core Vertical Slice Architecture with CQRS and REST API
 
 [![Build](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/dotnet.yml/badge.svg)](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/codeql-analysis.yml)
 [![DevSkim](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/devskim-analysis.yml/badge.svg)](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/actions/workflows/devskim-analysis.yml)
-[![License](https://img.shields.io/github/license/jeangatto/ASP.NET-Core-Clean-Architecture-CQRS-Event-Sourcing.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture.svg)](LICENSE)
 
-About the repoitory:
-
-Open source project written in the latest version of ASP.NET Core, implementing **Vertical Slice Architecture**, S.O.L.I.D. concepts, Clean Code, CQRS (Command Query Responsibility Segregation)
+This repository contains a sample blog API built with ASP.NET Core 10 using Vertical Slice Architecture, CQRS, and REST principles. The goal is to show how to keep features self-contained while still applying DDD and SOLID practices in a practical way.
 
 ## Give it a star! ⭐
 
-If you liked this project, learned something, give it a star. Thank you!
+If you found this project useful, consider giving it a star. It helps more than you might think.
 
-## **Architecture**
+## Architecture
 
 ![Vertical Slice Architecture](img/vertical-slice.png "Vertical Slice Architecture")
 
-> **What Is Vertical Slice Architecture**
->
-> The vertical slice architecture is a technique that helps us build maintainable applications by separating the application around features or “vertical slices”.
->
-> In this approach, we think of the application code in terms of features rather than the layer it sits in. We treat each feature as a vertical slice. Because every feature within the application is a separate component, it can change independently.
->
-> Advantages of Vertical Slice Architecture:
->
-> - Reduction in Coupling
-> - External Interaction
-> - Command and Query Responsibility Segregation
-> - Feature Grouping
->
-> -- <cite>https://code-maze.com/vertical-slice-architecture-aspnet-core/</cite>
+Vertical Slice Architecture organizes the application around business features rather than technical layers. Each feature contains the code it needs, including requests, handlers, validators, responses, and related domain models. This makes the system easier to evolve and avoids forcing unrelated concerns into shared layers.
 
-References:
+### Design goals
 
-- https://www.youtube.com/watch?v=L2Wnq0ChAIA
-- https://www.youtube.com/watch?v=lsddiYwWaOQ
+- Vertical Slice Architecture
+- CQRS with MediatR
+- JWT authentication
+- Domain-driven design concepts
+- Clean and maintainable code
+- Automated tests with xUnit and FluentAssertions
 
-## **Technologies**
+## Project structure
+
+- src/Blog.PublicAPI
+  - Data: EF Core context and configuration
+  - Domain: aggregates, entities, and business rules
+  - Features: feature-based controllers, requests, handlers, and responses
+  - Extensions: service registration and infrastructure helpers
+- test/Blog.PublicAPI.Tests
+  - UnitTests: focused unit tests for helpers and extensions
+  - IntegrationTests: end-to-end API validation scenarios
+
+## Prerequisites
+
+- .NET 10 SDK
+
+## Getting started
+
+1. Clone the repository.
+2. Restore dependencies:
+   ```bash
+   dotnet restore
+   ```
+3. Run the API:
+   ```bash
+   dotnet run --project src/Blog.PublicAPI
+   ```
+4. Open the API documentation in your browser:
+   - Scalar: http://localhost:5147/scalar/v1
+   - HTTPS: https://localhost:7112/scalar/v1
+
+## API overview
+
+The application exposes a small set of endpoints for blog-style scenarios:
+
+- POST /api/auth: authenticate a user and obtain a JWT token
+- POST /api/users: create a new user
+- POST /api/posts: create a new post (requires authentication)
+- GET /api/posts/{id}: retrieve a post by id
+
+## Running tests
+
+Run the full test suite with:
+
+```bash
+ dotnet test
+```
+
+## Technologies
 
 - ASP.NET Core 10
 - Entity Framework Core 10
-- Unit & Integration Tests + xUnit + FluentAssertions
-- AutoMapper
-- FluentValidator
-- MediatR
 - SQLite
+- MediatR
+- FluentValidation
+- AutoMapper
+- Ardalis.Result
+- xUnit, FluentAssertions, and ASP.NET Core MVC Testing
 
 ## License
 
-- [MIT License](https://github.com/jeangatto/ASP.NET-Core-Vertical-Slice-Architecture/blob/main/LICENSE)
+This project is licensed under the [MIT License](LICENSE).
