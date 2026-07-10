@@ -1,6 +1,7 @@
 name: "CodeQL Scan - C#"
 permissions:
   contents: read
+  security-events: read
   pull-requests: write
 
 on:
