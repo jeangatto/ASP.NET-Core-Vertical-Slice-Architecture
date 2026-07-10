@@ -1,4 +1,7 @@
 name: "CodeQL Scan - C#"
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   push:
