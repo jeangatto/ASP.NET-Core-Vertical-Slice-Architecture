@@ -57,8 +57,8 @@ Vertical Slice Architecture organizes the application around business features r
    ```
    
 6. Open the API documentation in your browser:
-   - Scalar: http://localhost:5147/scalar/v1
-   - HTTPS: https://localhost:7112/scalar/v1
+   - Scalar: http://localhost:{port}/scalar/v1
+   - HTTPS: http://localhost:{port}/scalar/v1
 
 ## API overview
 
