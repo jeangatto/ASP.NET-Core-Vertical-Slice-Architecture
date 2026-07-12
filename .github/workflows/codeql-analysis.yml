@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dotnet: ['10.0']
+        dotnet: ["10.0"]
 
     steps:
       - name: Checkout
@@ -50,4 +50,4 @@ jobs:
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v4
         with:
-          category: 'security'
+          category: "security"
